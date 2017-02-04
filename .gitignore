@@ -1,3 +1,16 @@
+# Build output folders.
 /dox/
+
+# Build output files.
+*.d
+*.gen
+*.o
+/pac*
+
+# Temporary files.
 *~
 *.swp
+
+# Operating system files.
+.DS_Store
+
