@@ -38,54 +38,75 @@ CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O3 -DNDEBUG
 LDFLAGS           ?= ${OS_LDFLAGS} -O1
 endif
 
-.PHONY: all clean default help
+# Source files generated from scripts.
+GENFILES          ?= \
+	source/library/meta/git.gen \
+
+# Special build commands.
 
 default: all
 
 all: pac${BINEXT} pacdoc${BINEXT} pacfmt${BINEXT} tests${BINEXT}
 
 clean:
-	$(foreach F,$(shell find . -iname *.[do] -type f),${RM} $F ${\n})
-	$(foreach F,$(shell find . -maxdepth 1 -type f -executable),${RM} $F ${\n})
+	$(foreach F,$(shell find . -iname *.[do] -type f),${RM} $F;)
+	$(foreach F,$(shell find . -iname *.gen -type f),${RM} $F;)
+	$(foreach F,$(shell find . -maxdepth 1 -type f -executable),${RM} $F;)
+	$(foreach F,$(wildcard dox),${RM} -Rf $F;)
 
 help:
 	@echo "Available Makefile commands:"
 	@echo "  make all         - Build all binaries."
 	@echo "  make all DEBUG=1 - Build all binaries in debug mode."
-	@echo "  make clean       - Delete all built files."
+	@echo "  make clean       - Delete all built and generated files."
+	@echo "  make dox         - Generate developer documentation."
 	@echo "  make help        - Show this help message."
 
-define \n
+.PHONY: all clean default dox help
 
-
-endef
-
+# Dependency file inclusion.
 -include $(shell find . -iname *.d)
 
-pac${BINEXT}: \
+# Dependency maps for primary compile targets.
+#
+# Most dependencies are resolved automatically via the GCC/clang -MMD command,
+# which means that just *.o files need to be listed as required by each target.
+# In case of special cases which cannot easily be catered via -MMD, such as
+# reliance on files generated from scripts, there is a special section further
+# down for writing extra dependency rules.
+
+dox: Doxyfile.gen
+	doxygen $<
+
+pac${BINEXT}: ${GENFILES} \
 		source/binaries/pac/main.o \
-		source/library/arg/parse.o
+		source/library/arg/parse.o \
 
-pacdoc${BINEXT}: \
+pacdoc${BINEXT}: ${GENFILES} \
 		source/binaries/pacdoc/main.o \
-		source/library/arg/parse.o
+		source/library/arg/parse.o \
 
-pacfmt${BINEXT}: \
+pacfmt${BINEXT}: ${GENFILES} \
 		source/binaries/pacfmt/main.o \
-		source/library/arg/parse.o
+		source/library/arg/parse.o \
 
-tests${BINEXT}: \
+tests${BINEXT}: ${GENFILES} \
 		source/tests/main.unit.o \
 		source/library/arg/parse.o \
-		source/library/unit/unit.o
+		source/library/unit/unit.o \
 
-${OUTDIR}/:
-	${MKDIR} $@
+# Special dependency rules.
+Doxygen.gen: .git/index
+source/library/meta/git.gen: .git/index
 
+# General compile rules.
 .SUFFIXES:
 
-%.o: ${OUTDIR}/
+%.gen:
+	cd $(dir $@) && sh $(notdir $@).sh
+
+%.o:
 	${CC} ${CFLAGS} -c -MMD $*.c -o $@
 
 %${BINEXT}:
-	${CC} ${LDFLAGS} ${LIBS} -o $@ $^
+	${CC} ${LDFLAGS} ${LIBS} -o $@ $(filter %.o,$^)

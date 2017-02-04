@@ -74,7 +74,7 @@ struct unit_T {
 
 static void Global_init(Global *g, const int argc, const char **argv);
 static void mode_test(Global *g);
-static void mode_help(const Global *g);
+static void mode_help(const char *binary_name, const Global *g);
 
 int main(const int argc, const char *argv[]) {
     Global g;
@@ -83,8 +83,8 @@ int main(const int argc, const char *argv[]) {
     if (!g.config.arg_result.is_ok || g.config.arg_result.tailc != 0) {
         fprintf(stderr,
                 "Unexpected argument: %s.\n"
-                "Try " META_TARGET " --help for more information.\n",
-                g.config.arg_result.tailv[0]);
+                "Try %s --help for more information.\n",
+                g.config.arg_result.tailv[0], argv[0]);
 
         exit(EXIT_FAILURE);
     }
@@ -95,7 +95,7 @@ int main(const int argc, const char *argv[]) {
             break;
 
         case UNIT_MODE_HELP:
-            mode_help(&g);
+            mode_help(argv[0], &g);
             break;
     }
     exit(g.stats.failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -136,8 +136,9 @@ void mode_test(Global *g) {
            g->stats.passed, g->stats.failed, g->stats.skipped);
 }
 
-void mode_help(const Global *g) {
-    puts("Usage: " META_TARGET " [options...] [--] [arguments...]\nOptions:");
+void mode_help(const char *binary_name, const Global *g) {
+    printf("Usage: %s [options...] [--] [arguments...]\nOptions:\n",
+           binary_name);
     arg_fprint_options(stdout, g->config.options);
 }
 
