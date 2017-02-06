@@ -305,8 +305,8 @@ typedef void (*unit_FnTest)(unit_T *t);
  * @see UNIT_TRACE()
  */
 typedef struct unit_Trace {
-    const char *file;
-    int line;
+    const char *file; ///< Name of file in which trace was generated.
+    int line; ///< File line at which trace was generated.
 } unit_Trace;
 
 /**
@@ -321,8 +321,6 @@ typedef struct unit_Trace {
  * framework.
  *
  * @param g Pointer to global state context.
- * @param argc Amount of provided command line arguments.
- * @param argv Command line argument array.
  *
  * @see unit_suite()
  */
@@ -354,7 +352,7 @@ void unit_named_suite(unit_G *g, const char *name, unit_FnSuite suite);
  * Declares unit test with same name as given function and executes it.
  *
  * @param s Pointer to suite state context.
- * @param suite Pointer to test function.
+ * @param test Pointer to test function.
  *
  * @see unit_named_test()
  */
