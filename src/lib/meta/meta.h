@@ -1,5 +1,5 @@
-#ifndef LIBRARY_META_META_H
-#define LIBRARY_META_META_H
+#ifndef LIB_META_META_H
+#define LIB_META_META_H
 
 /**
  * Project meta data.

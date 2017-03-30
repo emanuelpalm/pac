@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script for generating file.
-TARGET=Doxyfile.gen
+TARGET=Doxyfile
 
 command -v doxygen >/dev/null 2>&1 || {
     echo >&2 "Doxygen not available in PATH.";
@@ -19,10 +19,10 @@ PROJECT_NAME           = pac
 PROJECT_NUMBER         = $PROJECT_NUMBER
 PROJECT_BRIEF          =
 PROJECT_LOGO           =
-OUTPUT_DIRECTORY       = dox/
+OUTPUT_DIRECTORY       = target/doc/
 OPTIMIZE_OUTPUT_FOR_C  = YES
 JAVADOC_AUTOBRIEF      = YES
-INPUT                  = source/
+INPUT                  = src/
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md
 RECURSIVE              = YES

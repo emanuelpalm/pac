@@ -26,43 +26,56 @@ endif
 BINEXT            ?= ${OS_BINEXT}
 CC                ?= clang
 LIBS              ?= ${OS_LIBS}
-MKDIR             ?= mkdir
-RM                ?= rm
+MKDIR             ?= mkdir -p
+RM                ?= rm -f
+RMDIR             ?= rm -Rf
 XFLAGS            ?= -std=c11 -Wall -Wpedantic -Wextra
 
 ifdef DEBUG
 CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0 -DDEBUG
 LDFLAGS           ?= ${OS_LDFLAGS} -O0
+OUTDIR            ?= target/debug
 else
 CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O3 -DNDEBUG
 LDFLAGS           ?= ${OS_LDFLAGS} -O1
+OUTDIR            ?= target/release
 endif
 
 # Source files generated from scripts.
 GENFILES          ?= \
-	source/library/meta/git.gen \
+	src/lib/meta/git.gen \
 
 # Special build commands.
 
 default: all
 
-all: pac${BINEXT} pacdoc${BINEXT} pacfmt${BINEXT} tests${BINEXT}
+all: pac pacdoc pacfmt tests
 
 clean:
-	$(foreach F,$(shell find . -iname *.[do] -type f),${RM} $F;)
 	$(foreach F,$(shell find . -iname *.gen -type f),${RM} $F;)
-	$(foreach F,$(shell find . -maxdepth 1 -type f -executable),${RM} $F;)
-	$(foreach F,$(wildcard dox),${RM} -Rf $F;)
+	$(foreach F,$(wildcard Doxyfile),${RM} $F;)
+	$(foreach F,$(wildcard target),${RMDIR} $F;)
+
+doc: target/doc
 
 help:
 	@echo "Available Makefile commands:"
 	@echo "  make all         - Build all binaries."
 	@echo "  make all DEBUG=1 - Build all binaries in debug mode."
 	@echo "  make clean       - Delete all built and generated files."
-	@echo "  make dox         - Generate developer documentation."
+	@echo "  make doc         - Generate developer documentation."
 	@echo "  make help        - Show this help message."
+	@echo "  make pac         - Build pac binary."
+	@echo "  make pacdoc      - Build pacdoc binary."
+	@echo "  make pacfmt      - Build pacfmt binary."
+	@echo "  make tests       - Build tests binary."
 
-.PHONY: all clean default dox help
+pac: ${OUTDIR}/pac${BINEXT}
+pacdoc: ${OUTDIR}/pacdoc${BINEXT}
+pacfmt: ${OUTDIR}/pacfmt${BINEXT}
+tests: ${OUTDIR}/tests${BINEXT}
+
+.PHONY: all clean default doc help pac pacdoc pacfmt tests
 
 # Dependency file inclusion.
 -include $(shell find . -iname *.d)
@@ -70,34 +83,36 @@ help:
 # Dependency maps for primary compile targets.
 #
 # Most dependencies are resolved automatically via the GCC/clang -MMD command,
-# which means that just *.o files need to be listed as required by each target.
-# In case of special cases which cannot easily be catered via -MMD, such as
-# reliance on files generated from scripts, there is a special section further
-# down for writing extra dependency rules.
+# which means that just *.o files need to be listed as required by each binary
+# target.
 
-dox: Doxyfile.gen
-	doxygen $<
+Doxyfile: Doxyfile.sh .git/index
+	sh Doxyfile.sh
 
-pac${BINEXT}: ${GENFILES} \
-		source/binaries/pac/main.o \
-		source/library/arg/parse.o \
+target/doc: target Doxyfile
+	doxygen
 
-pacdoc${BINEXT}: ${GENFILES} \
-		source/binaries/pacdoc/main.o \
-		source/library/arg/parse.o \
+src/lib/meta/git.gen: .git/index
 
-pacfmt${BINEXT}: ${GENFILES} \
-		source/binaries/pacfmt/main.o \
-		source/library/arg/parse.o \
+${OUTDIR}:
+	${MKDIR} $@
 
-tests${BINEXT}: ${GENFILES} \
-		source/tests/main.unit.o \
-		source/library/arg/parse.o \
-		source/library/unit/unit.o \
+${OUTDIR}/pac${BINEXT}: ${GENFILES} \
+		${OUTDIR}/bin-pac-main.o \
+		${OUTDIR}/lib-arg-parse.o \
 
-# Special dependency rules.
-Doxygen.gen: .git/index
-source/library/meta/git.gen: .git/index
+${OUTDIR}/pacdoc${BINEXT}: ${GENFILES} \
+		${OUTDIR}/bin-pacdoc-main.o \
+		${OUTDIR}/lib-arg-parse.o \
+
+${OUTDIR}/pacfmt${BINEXT}: ${GENFILES} \
+		${OUTDIR}/bin-pacfmt-main.o \
+		${OUTDIR}/lib-arg-parse.o \
+
+${OUTDIR}/tests${BINEXT}: ${GENFILES} \
+		${OUTDIR}/tests-main.unit.o \
+		${OUTDIR}/lib-arg-parse.o \
+		${OUTDIR}/lib-unit-unit.o \
 
 # General compile rules.
 .SUFFIXES:
@@ -106,7 +121,9 @@ source/library/meta/git.gen: .git/index
 	cd $(dir $@) && sh $(notdir $@).sh
 
 %.o:
-	${CC} ${CFLAGS} -c -MMD $*.c -o $@
+	@${MKDIR} ${OUTDIR}
+	${CC} ${CFLAGS} -c -MMD src/$(subst -,/,$(notdir $*)).c -o $@
 
 %${BINEXT}:
+	@${MKDIR} ${OUTDIR}
 	${CC} ${LDFLAGS} ${LIBS} -o $@ $(filter %.o,$^)

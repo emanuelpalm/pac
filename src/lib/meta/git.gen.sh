@@ -17,8 +17,8 @@ VERSION_MINOR=$(expr "$GIT_TAG" : 'v[0-9]\+.\([0-9]\+\)')
 VERSION_PATCH=$(expr "$GIT_TAG" : 'v[0-9]\+.[0-9]\+.\([0-9]\+\)')
 
 echo -n "\
-#ifndef LIBRARY_META_GIT_GEN
-#define LIBRARY_META_GIT_GEN
+#ifndef LIB_META_GIT_GEN
+#define LIB_META_GIT_GEN
 
 /**
  * GIT meta data.

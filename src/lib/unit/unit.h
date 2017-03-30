@@ -1,5 +1,5 @@
-#ifndef LIBRARY_UNIT_UNIT_H
-#define LIBRARY_UNIT_UNIT_H
+#ifndef LIB_UNIT_UNIT_H
+#define LIB_UNIT_UNIT_H
 
 /**
  * Unit testing framework.

@@ -1,11 +1,8 @@
 # Build output folders.
-/dox/
+/target/
 
 # Build output files.
-*.d
 *.gen
-*.o
-/pac*
 
 # Temporary files.
 *~
