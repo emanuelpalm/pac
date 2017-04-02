@@ -111,7 +111,7 @@ ${OUTDIR}/pacfmt${BINEXT}: ${GENFILES} \
 		${OUTDIR}/lib-arg-parse.o \
 
 ${OUTDIR}/tests${BINEXT}: ${GENFILES} \
-		${OUTDIR}/tests-compiler-parse.unit.o \
+		${OUTDIR}/tests-pvm-parse.unit.o \
 		${OUTDIR}/tests-main.unit.o \
 		${OUTDIR}/lib-arg-parse.o \
 		${OUTDIR}/lib-unit-unit.o \
