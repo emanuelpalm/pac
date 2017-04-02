@@ -26,7 +26,7 @@ endif
 BINEXT            ?= ${OS_BINEXT}
 CC                ?= clang
 LIBS              ?= ${OS_LIBS}
-MKDIR             ?= mkdir -p
+MKDIRP            ?= mkdir -p
 RM                ?= rm -f
 RMDIR             ?= rm -Rf
 XFLAGS            ?= -std=c11 -Wall -Wpedantic -Wextra
@@ -94,9 +94,6 @@ target/doc: target Doxyfile
 
 src/lib/meta/git.gen: .git/index
 
-${OUTDIR}:
-	${MKDIR} $@
-
 ${OUTDIR}/pac${BINEXT}: ${GENFILES} \
 		${OUTDIR}/bin-pac-main.o \
 		${OUTDIR}/lib-pvm-parse.o \
@@ -123,9 +120,9 @@ ${OUTDIR}/tests${BINEXT}: ${GENFILES} \
 	cd $(dir $@) && sh $(notdir $@).sh
 
 %.o:
-	@${MKDIR} ${OUTDIR}
+	@${MKDIRP} $(dir $@)
 	${CC} ${CFLAGS} -c -MMD src/$(subst -,/,$(notdir $*)).c -o $@
 
 %${BINEXT}:
-	@${MKDIR} ${OUTDIR}
+	@${MKDIRP} $(dir $@)
 	${CC} ${LDFLAGS} ${LIBS} -o $@ $(filter %.o,$^)
