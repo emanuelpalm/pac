@@ -99,6 +99,7 @@ ${OUTDIR}:
 
 ${OUTDIR}/pac${BINEXT}: ${GENFILES} \
 		${OUTDIR}/bin-pac-main.o \
+		${OUTDIR}/lib-pvm-parse.o \
 		${OUTDIR}/lib-arg-parse.o \
 
 ${OUTDIR}/pacdoc${BINEXT}: ${GENFILES} \
@@ -110,6 +111,7 @@ ${OUTDIR}/pacfmt${BINEXT}: ${GENFILES} \
 		${OUTDIR}/lib-arg-parse.o \
 
 ${OUTDIR}/tests${BINEXT}: ${GENFILES} \
+		${OUTDIR}/tests-compiler-parse.unit.o \
 		${OUTDIR}/tests-main.unit.o \
 		${OUTDIR}/lib-arg-parse.o \
 		${OUTDIR}/lib-unit-unit.o \
