@@ -49,7 +49,7 @@ GENFILES          ?= \
 
 default: all
 
-all: pac pacdoc pacfmt tests
+all: pac pacdoc pacfmt tests doc
 
 clean:
 	$(foreach F,$(shell find . -iname *.gen -type f),${RM} $F;)

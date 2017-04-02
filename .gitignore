@@ -2,6 +2,7 @@
 /target/
 
 # Build output files.
+Doxyfile
 *.gen
 
 # Temporary files.
