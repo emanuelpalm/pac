@@ -1,21 +1,16 @@
-#ifndef LIB_PVM_TYPES_H
-#define LIB_PVM_TYPES_H
+#ifndef LIB_PVM_VALUE_H
+#define LIB_PVM_VALUE_H
 
 /**
- * PVM data types.
+ * PVM value type and utilities.
  *
  * @file
  */
 
+#include "function.h"
+#include "heap.h"
 #include <stdint.h>
 #include <stdlib.h>
-
-/// Indicates that some pvm_Function takes any amount of arguments when called.
-#define PVM_FUNCTION_ARITY_ANY -1
-
-typedef struct pvm_Function pvm_Function;
-
-typedef struct pvm_Heap pvm_Heap;
 
 typedef struct pvm_ValueArray pvm_ValueArray;
 typedef struct pvm_ValueBytes pvm_ValueBytes;
@@ -26,38 +21,6 @@ typedef struct pvm_ValueNumber pvm_ValueNumber;
 typedef struct pvm_ValueSymbol pvm_ValueSymbol;
 
 typedef struct pvm_Value pvm_Value;
-
-
-/**
- * A named function of known arity.
- */
-struct pvm_Function {
-    /// Function name.
-    const char *name;
-
-    /// Function parameter count, or PVM_FUNCTION_ARITY_ANY if variadic.
-    intptr_t arity;
-
-    /// Actual function pointer.
-    pvm_Value (*pointer)(pvm_Value *);
-};
-
-/**
- * A block of memory containing pvm_Value objects.
- */
-struct pvm_Heap {
-    /// Heap capacity, in bytes.
-    size_t capacity;
-
-    /// Heap length, in bytes.
-    size_t length;
-
-    /// Pointer to first byte in heap memory.
-    uint8_t *buffer;
-
-    /// File handle, if heap is associated with a file.
-    int handle;
-};
 
 /**
  * A sequence of pvm_Value objects of known length.
