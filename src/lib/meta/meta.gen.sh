@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script for generating file.
-TARGET=git.gen
+TARGET=meta.gen
 
 command -v git >/dev/null 2>&1 || {
     echo >&2 "GIT not available in PATH.";
@@ -17,11 +17,11 @@ VERSION_MINOR=$(expr "$GIT_TAG" : 'v[0-9]\+.\([0-9]\+\)')
 VERSION_PATCH=$(expr "$GIT_TAG" : 'v[0-9]\+.[0-9]\+.\([0-9]\+\)')
 
 echo "\
-#ifndef LIB_META_GIT_GEN
-#define LIB_META_GIT_GEN
+#ifndef LIB_META_META_GEN
+#define LIB_META_META_GEN
 
 /**
- * GIT meta data.
+ * Project meta data.
  *
  * @file
  */

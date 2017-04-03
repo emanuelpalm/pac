@@ -9,7 +9,7 @@
  * @file
  */
 
-#include "git.gen"
+#include "meta.gen"
 
 #endif
 

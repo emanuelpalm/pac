@@ -43,7 +43,7 @@ endif
 
 # Source files generated from scripts.
 GENFILES          ?= \
-	src/lib/meta/git.gen \
+	src/lib/meta/meta.gen \
 
 # Special build commands.
 
