@@ -89,7 +89,8 @@ tests: ${OUTDIR}/tests${BINEXT}
 Doxyfile: Doxyfile.sh .git/index
 	sh Doxyfile.sh
 
-target/doc: target Doxyfile
+target/doc: Doxyfile
+	@${MKDIRP} $(dir $@)
 	doxygen
 
 src/lib/meta/git.gen: .git/index
