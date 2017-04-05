@@ -41,9 +41,35 @@ LDFLAGS           ?= ${OS_LDFLAGS} -O1
 OUTDIR            ?= target/release
 endif
 
-# Source files generated from scripts.
-GENFILES          ?= \
-	src/lib/meta/meta.gen \
+# Dependency maps.
+#
+# Each C build target requires a list of the .c source files required to build
+# it. Header files are resolved automatically.
+
+CFILES_PAC        := \
+	src/bin/pac/main.c \
+	src/lib/arg/parse.c \
+
+CFILES_PACDOC     := \
+	src/bin/pacdoc/main.c \
+	src/lib/arg/parse.c \
+
+CFILES_PACFMT     := \
+	src/bin/pacfmt/main.c \
+	src/lib/arg/parse.c \
+
+CFILES_TESTS      := \
+	src/tests/main.unit.c \
+	src/lib/arg/parse.c \
+	src/lib/unit/unit.c \
+
+# Other build variables.
+
+objectify          = $(addprefix ${OUTDIR}/,$(subst /,-,$(1:src/%.c=%.o)))
+OFILES_PAC        := $(call objectify,$(CFILES_PAC))
+OFILES_PACDOC     := $(call objectify,$(CFILES_PACDOC))
+OFILES_PACFMT     := $(call objectify,$(CFILES_PACFMT))
+OFILES_TESTS      := $(call objectify,$(CFILES_TESTS))
 
 # Special build commands.
 
@@ -52,8 +78,6 @@ default: all
 all: pac pacdoc pacfmt tests doc
 
 clean:
-	$(foreach F,$(shell find . -iname *.gen -type f),${RM} $F;)
-	$(foreach F,$(wildcard Doxyfile),${RM} $F;)
 	$(foreach F,$(wildcard target),${RMDIR} $F;)
 
 doc: target/doc
@@ -62,8 +86,8 @@ help:
 	@echo "Available Makefile commands:"
 	@echo "  make all         - Build all binaries and documentation."
 	@echo "  make all DEBUG=1 - Build all in debug mode."
-	@echo "  make clean       - Delete all built and generated files."
-	@echo "  make doc         - Generate developer documentation."
+	@echo "  make clean       - Delete all built files."
+	@echo "  make doc         - Build developer documentation."
 	@echo "  make help        - Show this help message."
 	@echo "  make pac         - Build pac binary."
 	@echo "  make pacdoc      - Build pacdoc binary."
@@ -86,37 +110,22 @@ tests: ${OUTDIR}/tests${BINEXT}
 # which means that just *.o files need to be listed as required by each binary
 # target.
 
-Doxyfile: Doxyfile.sh .git/index
+target/doc: target/Doxyfile
+	cd target && doxygen
+
+target/Doxyfile: Doxyfile.sh .git/index src/lib/meta/meta.h
 	sh Doxyfile.sh
 
-target/doc: Doxyfile
-	@${MKDIRP} $(dir $@)
-	doxygen
+src/lib/meta/meta.h: .git/index
+	cd $(dir $@) && sh meta.sh
 
-src/lib/meta/git.gen: .git/index
-
-${OUTDIR}/pac${BINEXT}: ${GENFILES} \
-		${OUTDIR}/bin-pac-main.o \
-		${OUTDIR}/lib-arg-parse.o \
-
-${OUTDIR}/pacdoc${BINEXT}: ${GENFILES} \
-		${OUTDIR}/bin-pacdoc-main.o \
-		${OUTDIR}/lib-arg-parse.o \
-
-${OUTDIR}/pacfmt${BINEXT}: ${GENFILES} \
-		${OUTDIR}/bin-pacfmt-main.o \
-		${OUTDIR}/lib-arg-parse.o \
-
-${OUTDIR}/tests${BINEXT}: ${GENFILES} \
-		${OUTDIR}/tests-main.unit.o \
-		${OUTDIR}/lib-arg-parse.o \
-		${OUTDIR}/lib-unit-unit.o \
+${OUTDIR}/pac${BINEXT}: src/lib/meta/meta.h ${OFILES_PAC}
+${OUTDIR}/pacdoc${BINEXT}: src/lib/meta/meta.h ${OFILES_PACDOC}
+${OUTDIR}/pacfmt${BINEXT}: src/lib/meta/meta.h ${OFILES_PACFMT}
+${OUTDIR}/tests${BINEXT}: src/lib/meta/meta.h ${OFILES_TESTS}
 
 # Concrete file type build rules.
 .SUFFIXES:
-
-%.gen:
-	cd $(dir $@) && sh $(notdir $@).sh
 
 %.o:
 	@${MKDIRP} $(dir $@)
