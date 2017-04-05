@@ -1,9 +1,8 @@
 # Build output folders.
 /target/
 
-# Build output files.
-Doxyfile
-*.gen
+# Generated files.
+/src/lib/meta/meta.h
 
 # Temporary files.
 *~
