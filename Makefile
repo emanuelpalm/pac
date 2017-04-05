@@ -60,8 +60,8 @@ doc: target/doc
 
 help:
 	@echo "Available Makefile commands:"
-	@echo "  make all         - Build all binaries."
-	@echo "  make all DEBUG=1 - Build all binaries in debug mode."
+	@echo "  make all         - Build all binaries and documentation."
+	@echo "  make all DEBUG=1 - Build all in debug mode."
 	@echo "  make clean       - Delete all built and generated files."
 	@echo "  make doc         - Generate developer documentation."
 	@echo "  make help        - Show this help message."
@@ -111,7 +111,7 @@ ${OUTDIR}/tests${BINEXT}: ${GENFILES} \
 		${OUTDIR}/lib-arg-parse.o \
 		${OUTDIR}/lib-unit-unit.o \
 
-# General compile rules.
+# Concrete file type build rules.
 .SUFFIXES:
 
 %.gen:
