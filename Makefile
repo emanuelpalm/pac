@@ -104,11 +104,7 @@ tests: ${OUTDIR}/tests${BINEXT}
 # Dependency file inclusion.
 -include $(shell find . -iname *.d)
 
-# Dependency maps for primary compile targets.
-#
-# Most dependencies are resolved automatically via the GCC/clang -MMD command,
-# which means that just *.o files need to be listed as required by each binary
-# target.
+# Build rules for concrete targets.
 
 target/doc: target/Doxyfile
 	cd target && doxygen
@@ -124,7 +120,7 @@ ${OUTDIR}/pacdoc${BINEXT}: src/lib/meta/meta.h ${OFILES_PACDOC}
 ${OUTDIR}/pacfmt${BINEXT}: src/lib/meta/meta.h ${OFILES_PACFMT}
 ${OUTDIR}/tests${BINEXT}: src/lib/meta/meta.h ${OFILES_TESTS}
 
-# Concrete file type build rules.
+# Build rules for general file types.
 .SUFFIXES:
 
 %.o:
