@@ -139,7 +139,10 @@ struct pvm_Value {
     /// - PVM_VALUE_FLAGS_MARK
     uint64_t flags;
 
-    /// Value data.
+    /// Value body.
+    ///
+    /// Only the union field corresponding to the current kind may be safely
+    /// used.
     union {
         pvm_ValueBytes bytes;
         pvm_ValueNumber number;
