@@ -13,7 +13,7 @@ command -v git >/dev/null 2>&1 && {
     PROJECT_NUMBER=$(expr "$GIT_TAG" : 'v\([0-9]\+.[0-9]\+.[0-9]\+\)')
 }
 
-echo -n "\
+echo "\
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = pac
 PROJECT_NUMBER         = $PROJECT_NUMBER
