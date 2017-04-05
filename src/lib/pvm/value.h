@@ -9,8 +9,15 @@
 
 #include "function.h"
 #include "heap.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+
+/// Bit mask for extracting pvm_ValueKind from uint64_t flags.
+#define PVM_VALUE_FLAGS_KIND 0x0000000000000007
+
+/// Bit mask for extracting pvm_Value index from uint64_t flags.
+#define PVM_VALUE_FLAGS_INDEX 0x0ffffffffffffff8
 
 typedef struct pvm_ValueArray pvm_ValueArray;
 typedef struct pvm_ValueBytes pvm_ValueBytes;
@@ -20,6 +27,7 @@ typedef struct pvm_ValueLink pvm_ValueLink;
 typedef struct pvm_ValueNumber pvm_ValueNumber;
 typedef struct pvm_ValueSymbol pvm_ValueSymbol;
 
+typedef enum pvm_ValueKind pvm_ValueKind;
 typedef struct pvm_Value pvm_Value;
 
 /**
@@ -61,9 +69,6 @@ struct pvm_ValueClosure {
 struct pvm_ValueLazy {
     /// Reference to heap containing value not yet loaded.
     const pvm_Heap *heap;
-
-    /// Offset from beginning of some memory block owned by referenced heap.
-    size_t offset;
 };
 
 /**
@@ -97,23 +102,43 @@ struct pvm_ValueSymbol {
 };
 
 /**
+ * Identifies the kind of some pvm_Value.
+ *
+ * The ordinal of each kind must be fit inside the PVM_VALUE_FLAGS_KIND
+ * bitmask.
+ */
+enum pvm_ValueKind {
+    PVM_VALUE_UNDEFINED = 0,
+    PVM_VALUE_BYTES = 1,
+    PVM_VALUE_NUMBER = 2,
+    PVM_VALUE_SYMBOL = 3,
+    PVM_VALUE_CLOSURE = 4,
+    PVM_VALUE_ARRAY = 5,
+    PVM_VALUE_LINK = 6,
+    PVM_VALUE_LAZY = 7,
+};
+
+/**
  * A PVM value.
  *
- * Implemented as a tagged union. Only the union value named by the value kind
- * may be safely used.
+ * Values are the nodes that make up a PVM state tree. Each node has a kind,
+ * an index, and a body whose fields vary depending on the kind.
+ *
+ * ### Indexed Values
+ *
+ * Values that originate from persistent memory all have an index value, which
+ * uniquely identifies its position within that memory. Such values are
+ * referred to as being indexed.
  */
 struct pvm_Value {
-    /// Value kind.
-    enum {
-        PVM_VALUE_UNDEFINED,
-        PVM_VALUE_BYTES,
-        PVM_VALUE_NUMBER,
-        PVM_VALUE_SYMBOL,
-        PVM_VALUE_CLOSURE,
-        PVM_VALUE_ARRAY,
-        PVM_VALUE_LINK,
-        PVM_VALUE_LAZY,
-    } kind;
+    /// Value flags.
+    ///
+    /// Contains bitmask fields accessible using the following masks:
+    /// - PVM_VALUE_FLAGS_KIND
+    /// - PVM_VALUE_FLAGS_INDEX
+    /// - PVM_VALUE_FLAGS_MARK
+    uint64_t flags;
+
     /// Value data.
     union {
         pvm_ValueBytes bytes;
