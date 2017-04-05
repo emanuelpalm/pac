@@ -27,7 +27,6 @@ typedef struct pvm_ValueLink pvm_ValueLink;
 typedef struct pvm_ValueNumber pvm_ValueNumber;
 typedef struct pvm_ValueSymbol pvm_ValueSymbol;
 
-typedef enum pvm_ValueKind pvm_ValueKind;
 typedef struct pvm_Value pvm_Value;
 
 /**
@@ -107,7 +106,7 @@ struct pvm_ValueSymbol {
  * The ordinal of each kind must be fit inside the PVM_VALUE_FLAGS_KIND
  * bitmask.
  */
-enum pvm_ValueKind {
+typedef enum pvm_ValueKind {
     PVM_VALUE_UNDEFINED = 0,
     PVM_VALUE_BYTES = 1,
     PVM_VALUE_NUMBER = 2,
@@ -116,7 +115,7 @@ enum pvm_ValueKind {
     PVM_VALUE_ARRAY = 5,
     PVM_VALUE_LINK = 6,
     PVM_VALUE_LAZY = 7,
-};
+} pvm_ValueKind;
 
 /**
  * A PVM value.
