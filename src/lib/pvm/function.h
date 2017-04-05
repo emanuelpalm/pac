@@ -1,11 +1,9 @@
 #ifndef LIB_PVM_FUNCTION_H
 #define LIB_PVM_FUNCTION_H
 
-/**
- * PVM function type and utilities.
- *
- * @file
- */
+/// PVM function type and utilities.
+///
+/// \file
 
 #include <stdint.h>
 
@@ -15,9 +13,7 @@
 typedef struct pvm_Function pvm_Function;
 typedef struct pvm_Value pvm_Value;
 
-/**
- * A named function of known arity.
- */
+/// A named function of known arity.
 struct pvm_Function {
     /// Function name.
     const char *name;

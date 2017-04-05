@@ -20,11 +20,9 @@ echo "\
 #ifndef LIB_META_META_GEN
 #define LIB_META_META_GEN
 
-/**
- * Project meta data.
- *
- * @file
- */
+/// Project meta data.
+///
+/// \\file
 
 /// Project revision hash C string.
 #define META_REVISION_HASH \"$REVISION_HASH\"

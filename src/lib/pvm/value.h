@@ -1,11 +1,9 @@
 #ifndef LIB_PVM_VALUE_H
 #define LIB_PVM_VALUE_H
 
-/**
- * PVM value type and utilities.
- *
- * @file
- */
+/// PVM value type and utilities.
+///
+/// \file
 
 #include "function.h"
 #include "heap.h"
@@ -29,9 +27,7 @@ typedef struct pvm_ValueSymbol pvm_ValueSymbol;
 
 typedef struct pvm_Value pvm_Value;
 
-/**
- * A sequence of pvm_Value objects of known length.
- */
+/// A sequence of pvm_Value objects of known length.
 struct pvm_ValueArray {
     /// Amount of values in sequence.
     size_t length;
@@ -40,9 +36,7 @@ struct pvm_ValueArray {
     const pvm_Value *values;
 };
 
-/**
- * A sequence of bytes of known length.
- */
+/// A sequence of bytes of known length.
 struct pvm_ValueBytes {
     /// Amount of bytes in sequence.
     size_t length;
@@ -51,9 +45,7 @@ struct pvm_ValueBytes {
     const uint8_t *bytes;
 };
 
-/**
- * A function closure.
- */
+/// A function closure.
 struct pvm_ValueClosure {
     /// Pointer to function.
     const pvm_Function *function;
@@ -62,17 +54,13 @@ struct pvm_ValueClosure {
     const pvm_Value *value;
 };
 
-/**
- * A pvm_Value yet to be loaded.
- */
+/// A pvm_Value yet to be loaded.
 struct pvm_ValueLazy {
     /// Reference to heap containing value not yet loaded.
     const pvm_Heap *heap;
 };
 
-/**
- * A link joining two pvm_Value objects.
- */
+/// A link joining two pvm_Value objects.
 struct pvm_ValueLink {
     /// Link first value.
     const pvm_Value *head;
@@ -81,17 +69,13 @@ struct pvm_ValueLink {
     const pvm_Value *tail;
 };
 
-/**
- * A numeric value.
- */
+/// A numeric value.
 struct pvm_ValueNumber {
     /// Number integer value.
     int64_t integer;
 };
 
-/**
- * A named symbol table reference.
- */
+/// A named symbol table reference.
 struct pvm_ValueSymbol {
     /// Amount of bytes in symbol name.
     size_t length;
@@ -100,12 +84,10 @@ struct pvm_ValueSymbol {
     const uint8_t *bytes;
 };
 
-/**
- * Identifies the kind of some pvm_Value.
- *
- * The ordinal of each kind must be fit inside the PVM_VALUE_FLAGS_KIND
- * bitmask.
- */
+/// Identifies the kind of some pvm_Value.
+///
+/// The ordinal of each kind must be fit inside the PVM_VALUE_FLAGS_KIND
+/// bitmask.
 typedef enum pvm_ValueKind {
     PVM_VALUE_UNDEFINED = 0,
     PVM_VALUE_BYTES = 1,
@@ -117,18 +99,16 @@ typedef enum pvm_ValueKind {
     PVM_VALUE_LAZY = 7,
 } pvm_ValueKind;
 
-/**
- * A PVM value.
- *
- * Values are the nodes that make up a PVM state tree. Each node has a kind,
- * an index, and a body whose fields vary depending on the kind.
- *
- * ### Indexed Values
- *
- * Values that originate from persistent memory all have an index value, which
- * uniquely identifies its position within that memory. Such values are
- * referred to as being indexed.
- */
+/// A PVM value.
+///
+/// Values are the nodes that make up a PVM state tree. Each node has a kind,
+/// an index, and a body whose fields vary depending on the kind.
+///
+/// ## Indexed Values
+///
+/// Values that originate from persistent memory all have an index value, which
+/// uniquely identifies its position within that memory. Such values are
+/// referred to as being indexed.
 struct pvm_Value {
     /// Value flags.
     ///
@@ -153,38 +133,32 @@ struct pvm_Value {
     } as;
 };
 
-/**
- * Resolves pvm_ValueKind of given value.
- *
- * @param value Inspected value.
- * @return Value kind.
- *
- * @see pvm_Value
- */
+/// Resolves pvm_ValueKind of given value.
+///
+/// \param value Inspected value.
+/// \return Value kind.
+///
+/// \see pvm_Value
 static inline pvm_ValueKind pvm_getValueKind(pvm_Value *value) {
     return value->flags & PVM_VALUE_FLAGS_KIND;
 }
 
-/**
- * Resolves index of given value.
- *
- * @param value Inspected value.
- * @return Value index.
- *
- * @see pvm_Value
- */
+/// Resolves index of given value.
+///
+/// \param value Inspected value.
+/// \return Value index.
+///
+/// \see pvm_Value
 static inline uint64_t pvm_getValueIndex(pvm_Value *value) {
     return value->flags & PVM_VALUE_FLAGS_INDEX;
 }
 
-/**
- * Determines whether or not given value is indexed.
- *
- * @param value Inspected value.
- * @return Status.
- *
- * @see pvm_Value
- */
+/// Determines whether or not given value is indexed.
+///
+/// \param value Inspected value.
+/// \return Status.
+///
+/// \see pvm_Value
 static inline bool pvm_isValueIndexed(pvm_Value *value) {
     return pvm_getValueIndex(value) != 0;
 }
