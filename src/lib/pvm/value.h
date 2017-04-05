@@ -154,4 +154,40 @@ struct pvm_Value {
     } as;
 };
 
+/**
+ * Resolves pvm_ValueKind of given value.
+ *
+ * @param value Inspected value.
+ * @return Value kind.
+ *
+ * @see pvm_Value
+ */
+static inline pvm_ValueKind pvm_getValueKind(pvm_Value *value) {
+    return value->flags & PVM_VALUE_FLAGS_KIND;
+}
+
+/**
+ * Resolves index of given value.
+ *
+ * @param value Inspected value.
+ * @return Value index.
+ *
+ * @see pvm_Value
+ */
+static inline uint64_t pvm_getValueIndex(pvm_Value *value) {
+    return value->flags & PVM_VALUE_FLAGS_INDEX;
+}
+
+/**
+ * Determines whether or not given value is indexed.
+ *
+ * @param value Inspected value.
+ * @return Status.
+ *
+ * @see pvm_Value
+ */
+static inline bool pvm_isValueIndexed(pvm_Value *value) {
+    return pvm_getValueIndex(value) != 0;
+}
+
 #endif
