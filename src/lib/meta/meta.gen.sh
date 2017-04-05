@@ -22,7 +22,7 @@ echo "\
 
 /// Project meta data.
 ///
-/// \\file
+/// \\\\file
 
 /// Project revision hash C string.
 #define META_REVISION_HASH \"$REVISION_HASH\"
