@@ -20,7 +20,7 @@
  *
  * There are two types of command line options, flags and pairs. The former
  * consists of only a key, while the latter consists of a name followed by a C
- * string value. An option is treated as a pair only if its `value_type`
+ * string value. An option is treated as a pair only if its `valueType`
  * property is non-NULL.
  *
  * @see arg_parse()
@@ -36,7 +36,7 @@ typedef struct arg_Option {
     const char *description;
 
     /// Human-readable value type name, or `NULL` if option is flag.
-    const char *value_type;
+    const char *valueType;
 } arg_Option;
 
 /**
@@ -52,7 +52,7 @@ typedef struct arg_Result {
     const char **tailv;
 
     /// If `false`, parsing stopped at unknown option now in `tailv[0]`.
-    bool is_ok;
+    bool isOk;
 } arg_Result;
 
 /**
@@ -61,7 +61,7 @@ typedef struct arg_Result {
  * @param stream Target output stream.
  * @param option Pointer to option.
  */
-void arg_fprint_option(FILE *stream, const arg_Option *option);
+void arg_fprintOption(FILE *stream, const arg_Option *option);
 
 /**
  * Prints `options` to `stream`.
@@ -69,7 +69,7 @@ void arg_fprint_option(FILE *stream, const arg_Option *option);
  * @param stream Target output stream.
  * @param options Pointer to zero-terminated array of CLI options.
  */
-void arg_fprint_options(FILE *stream, const arg_Option options[]);
+void arg_fprintOptions(FILE *stream, const arg_Option options[]);
 
 /**
  * @brief Parses `argc` and `argv` using `options` and writes any matches to
@@ -108,7 +108,7 @@ void arg_fprint_options(FILE *stream, const arg_Option options[]);
  *
  *     // argc and argv are modified to skip program name entry.
  *     const arg_Result result = arg_parse(argc - 1, &argv[1], options, out);
- *     if (!result.is_ok) {
+ *     if (!result.isOk) {
  *         fprintf(stderr, "Unknown option: %s\n", result.tailv[0]);
  *         return EXIT_FAILURE;
  *     }

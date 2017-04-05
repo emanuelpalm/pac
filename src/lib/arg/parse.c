@@ -5,14 +5,17 @@
 
 typedef arg_Option Option;
 typedef arg_Result Result;
+
+typedef struct arg_Context Context;
+
 typedef bool (*FnOptionMatcher)(const char *arg, const Option *opt);
 
-typedef struct arg_Context {
+struct arg_Context {
     int argc;
     const char **argv;
     const Option *opts;
     const char **out;
-} Context;
+};
 
 typedef enum arg_Kind {
     ARGV_KIND_SHORT,
@@ -30,7 +33,7 @@ static bool option_is_pair(const Option *opt);
 static bool match_short(const char *arg, const Option *opt);
 static bool match_long(const char *arg, const Option *opt);
 
-void arg_fprint_option(FILE *stream, const Option *opt) {
+void arg_fprintOption(FILE *stream, const Option *opt) {
     assert(stream != NULL);
     assert(opt != NULL);
     assert(opt->name != NULL);
@@ -40,20 +43,20 @@ void arg_fprint_option(FILE *stream, const Option *opt) {
 
     const char *name = opt->name;
     char buffer[32];
-    if (opt->value_type != NULL) {
-        snprintf(buffer, sizeof(buffer), "%s <%s>", name, opt->value_type);
+    if (opt->valueType != NULL) {
+        snprintf(buffer, sizeof(buffer), "%s <%s>", name, opt->valueType);
         name = buffer;
     }
     fprintf(stream, " --%-20s %s\r\n", name, opt->description);
 }
 
-void arg_fprint_options(FILE *stream, const Option opts[]) {
+void arg_fprintOptions(FILE *stream, const Option opts[]) {
     assert(stream != NULL);
     assert(opts != NULL);
 
     const Option *opt = opts;
     for (; opt->name != NULL; opt = &opt[1]) {
-        arg_fprint_option(stream, opt);
+        arg_fprintOption(stream, opt);
     }
 }
 
@@ -82,7 +85,7 @@ Result parse(Context *ctx) {
 
         default:
             return (Result){
-                .tailc = ctx->argc, .tailv = ctx->argv, .is_ok = true};
+                .tailc = ctx->argc, .tailv = ctx->argv, .isOk = true};
     }
 }
 
@@ -115,7 +118,7 @@ Result parse_option(FnOptionMatcher matches, Context *ctx) {
             return take_option(index, opt, ctx);
         }
     }
-    return (Result){.tailc = ctx->argc, .tailv = ctx->argv, .is_ok = false};
+    return (Result){.tailc = ctx->argc, .tailv = ctx->argv, .isOk = false};
 }
 
 Result take_option(const size_t index, const Option *opt, Context *ctx) {
@@ -140,7 +143,7 @@ Result take_option(const size_t index, const Option *opt, Context *ctx) {
 bool option_is_pair(const Option *opt) {
     assert(opt != NULL);
 
-    return opt->value_type != NULL;
+    return opt->valueType != NULL;
 }
 
 bool match_short(const char *arg, const Option *opt) {

@@ -333,9 +333,9 @@ void unit_main(unit_G *g);
  * @param g Pointer to global state context.
  * @param suite Pointer to suite function.
  *
- * @see unit_named_suite()
+ * @see unit_namedSuite()
  */
-#define unit_suite(g, suite) unit_named_suite(g, #suite, suite)
+#define unit_suite(g, suite) unit_namedSuite(g, #suite, suite)
 
 /**
  * Declares named test suite and executes associated tests.
@@ -346,7 +346,7 @@ void unit_main(unit_G *g);
  *
  * @see unit_suite()
  */
-void unit_named_suite(unit_G *g, const char *name, unit_FnSuite suite);
+void unit_namedSuite(unit_G *g, const char *name, unit_FnSuite suite);
 
 /**
  * Declares unit test with same name as given function and executes it.
@@ -354,9 +354,9 @@ void unit_named_suite(unit_G *g, const char *name, unit_FnSuite suite);
  * @param s Pointer to suite state context.
  * @param test Pointer to test function.
  *
- * @see unit_named_test()
+ * @see unit_namedTest()
  */
-#define unit_test(s, test) unit_named_test(s, #test, test)
+#define unit_test(s, test) unit_namedTest(s, #test, test)
 
 /**
  * Declares unit test with same name as given function and executes it.
@@ -367,7 +367,7 @@ void unit_named_suite(unit_G *g, const char *name, unit_FnSuite suite);
  *
  * @see unit_test()
  */
-void unit_named_test(unit_S *s, const char *name, unit_FnTest test);
+void unit_namedTest(unit_S *s, const char *name, unit_FnTest test);
 
 /**
  * Passes test `t`.

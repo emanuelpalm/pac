@@ -43,7 +43,7 @@ struct unit_G {
         bool is_verbose;
         Mode mode;
         const arg_Option *options;
-        arg_Result arg_result;
+        arg_Result argResult;
     } config;
     struct {
         size_t passed;
@@ -72,36 +72,36 @@ struct unit_T {
     jmp_buf jmp;
 };
 
-static void Global_init(Global *g, const int argc, const char **argv);
-static void mode_test(Global *g);
-static void mode_help(const char *binary_name, const Global *g);
+static void initGlobal(Global *g, const int argc, const char **argv);
+static void modeTest(Global *g);
+static void modeHelp(const char *binaryName, const Global *g);
 
 int main(const int argc, const char *argv[]) {
     Global g;
-    Global_init(&g, argc, argv);
+    initGlobal(&g, argc, argv);
 
-    if (!g.config.arg_result.is_ok || g.config.arg_result.tailc != 0) {
+    if (!g.config.argResult.isOk || g.config.argResult.tailc != 0) {
         fprintf(stderr,
                 "Unexpected argument: %s.\n"
                 "Try %s --help for more information.\n",
-                g.config.arg_result.tailv[0], argv[0]);
+                g.config.argResult.tailv[0], argv[0]);
 
         exit(EXIT_FAILURE);
     }
 
     switch (g.config.mode) {
         case UNIT_MODE_TEST:
-            mode_test(&g);
+            modeTest(&g);
             break;
 
         case UNIT_MODE_HELP:
-            mode_help(argv[0], &g);
+            modeHelp(argv[0], &g);
             break;
     }
     exit(g.stats.failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
-void Global_init(Global *g, const int argc, const char **argv) {
+void initGlobal(Global *g, const int argc, const char **argv) {
     assert(g != NULL);
     assert(argv != NULL);
 
@@ -120,13 +120,13 @@ void Global_init(Global *g, const int argc, const char **argv) {
     g->config.is_verbose = out[3] != NULL;
     g->config.mode = out[0] != NULL ? UNIT_MODE_HELP : UNIT_MODE_TEST;
     g->config.options = options;
-    g->config.arg_result = result;
+    g->config.argResult = result;
 
     g->target.suite = out[1];
     g->target.test = out[2];
 }
 
-void mode_test(Global *g) {
+void modeTest(Global *g) {
     unit_main(g);
 
     printf(COLORIZE(COLOR_BLUE, "TOTAL")
@@ -136,13 +136,13 @@ void mode_test(Global *g) {
            g->stats.passed, g->stats.failed, g->stats.skipped);
 }
 
-void mode_help(const char *binary_name, const Global *g) {
+void modeHelp(const char *binaryName, const Global *g) {
     printf("Usage: %s [options...] [--] [arguments...]\nOptions:\n",
-           binary_name);
-    arg_fprint_options(stdout, g->config.options);
+           binaryName);
+    arg_fprintOptions(stdout, g->config.options);
 }
 
-void unit_named_suite(Global *g, const char *name, FnSuite suite) {
+void unit_namedSuite(Global *g, const char *name, FnSuite suite) {
     assert(g != NULL && "Global state pointer is required.");
     assert(name != NULL && "Suite name is required.");
     assert(suite != NULL && "Suite function is required.");
@@ -171,7 +171,7 @@ void unit_named_suite(Global *g, const char *name, FnSuite suite) {
     g->stats.skipped += s.stats.skipped;
 }
 
-void unit_named_test(Suite *s, const char *name, FnTest test) {
+void unit_namedTest(Suite *s, const char *name, FnTest test) {
     assert(s != NULL && "Suite state pointer is required.");
     assert(name != NULL && "Test name is required.");
     assert(test != NULL && "Test function is required.");
