@@ -109,16 +109,16 @@ tests: ${OUTDIR}/tests${BINEXT}
 target/doc: target/Doxyfile
 	cd target && doxygen
 
-target/Doxyfile: Doxyfile.sh .git/index src/lib/meta/meta.h
+target/Doxyfile: Doxyfile.sh .git/index src/lib/meta/version.h
 	sh Doxyfile.sh
 
-src/lib/meta/meta.h: .git/index
-	cd $(dir $@) && sh meta.sh
+src/lib/meta/version.h: .git/index
+	cd $(dir $@) && sh version.sh
 
-${OUTDIR}/pac${BINEXT}: src/lib/meta/meta.h ${OFILES_PAC}
-${OUTDIR}/pacdoc${BINEXT}: src/lib/meta/meta.h ${OFILES_PACDOC}
-${OUTDIR}/pacfmt${BINEXT}: src/lib/meta/meta.h ${OFILES_PACFMT}
-${OUTDIR}/tests${BINEXT}: src/lib/meta/meta.h ${OFILES_TESTS}
+${OUTDIR}/pac${BINEXT}: src/lib/meta/version.h ${OFILES_PAC}
+${OUTDIR}/pacdoc${BINEXT}: src/lib/meta/version.h ${OFILES_PACDOC}
+${OUTDIR}/pacfmt${BINEXT}: src/lib/meta/version.h ${OFILES_PACFMT}
+${OUTDIR}/tests${BINEXT}: src/lib/meta/version.h ${OFILES_TESTS}
 
 # Build rules for general file types.
 .SUFFIXES:

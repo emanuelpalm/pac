@@ -4,7 +4,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include "../arg/parse.h"
-#include "../meta/meta.h"
 
 #ifndef UNIT_NO_COLOR
 #define COLOR_BLUE "\x1B[34m"
