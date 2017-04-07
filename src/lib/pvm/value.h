@@ -136,7 +136,7 @@ struct pvm_Value {
 /// Resolves pvm_ValueKind of given value.
 ///
 /// \param value Inspected value.
-/// \return Value kind.
+/// \returns     Value kind.
 ///
 /// \see pvm_Value
 static inline pvm_ValueKind pvm_getValueKind(pvm_Value *value) {
@@ -146,7 +146,7 @@ static inline pvm_ValueKind pvm_getValueKind(pvm_Value *value) {
 /// Resolves index of given value.
 ///
 /// \param value Inspected value.
-/// \return Value index.
+/// \returns     Value index.
 ///
 /// \see pvm_Value
 static inline uint64_t pvm_getValueIndex(pvm_Value *value) {
@@ -156,7 +156,7 @@ static inline uint64_t pvm_getValueIndex(pvm_Value *value) {
 /// Determines whether or not given value is indexed.
 ///
 /// \param value Inspected value.
-/// \return Status.
+/// \returns     Status.
 ///
 /// \see pvm_Value
 static inline bool pvm_isValueIndexed(pvm_Value *value) {
