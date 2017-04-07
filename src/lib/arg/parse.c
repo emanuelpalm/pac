@@ -27,11 +27,11 @@ typedef enum arg_Kind {
 
 static Result parse(Context *ctx);
 static Kind kind(const char *arg);
-static Result parse_option(FnOptionMatcher matches, Context *ctx);
-static Result take_option(const size_t index, const Option *opt, Context *ctx);
-static bool option_is_pair(const Option *opt);
-static bool match_short(const char *arg, const Option *opt);
-static bool match_long(const char *arg, const Option *opt);
+static Result parseOption(FnOptionMatcher matches, Context *ctx);
+static Result takeOption(const size_t index, const Option *opt, Context *ctx);
+static bool optionIsPair(const Option *opt);
+static bool matchShort(const char *arg, const Option *opt);
+static bool matchLong(const char *arg, const Option *opt);
 
 void arg_fprintOption(FILE *stream, const Option *opt) {
     assert(stream != NULL);
@@ -74,10 +74,10 @@ Result parse(Context *ctx) {
 
     switch (kind(ctx->argv[0])) {
         case ARGV_KIND_SHORT:
-            return parse_option(match_short, ctx);
+            return parseOption(matchShort, ctx);
 
         case ARGV_KIND_LONG:
-            return parse_option(match_long, ctx);
+            return parseOption(matchLong, ctx);
 
         case ARGV_KIND_STOP:
             ctx->argc -= 1;
@@ -108,26 +108,26 @@ Kind kind(const char *arg) {
     return ARGV_KIND_VALUE;
 }
 
-Result parse_option(FnOptionMatcher matches, Context *ctx) {
+Result parseOption(FnOptionMatcher matches, Context *ctx) {
     assert(matches != NULL);
 
     const char *arg = ctx->argv[0];
     const Option *opt = ctx->opts;
     for (size_t index = 0; opt->name != NULL; opt = &opt[1], ++index) {
         if (matches(arg, opt)) {
-            return take_option(index, opt, ctx);
+            return takeOption(index, opt, ctx);
         }
     }
     return (Result){.tailc = ctx->argc, .tailv = ctx->argv, .isOk = false};
 }
 
-Result take_option(const size_t index, const Option *opt, Context *ctx) {
+Result takeOption(const size_t index, const Option *opt, Context *ctx) {
     assert(opt != NULL);
     assert(opt->name != NULL);
     assert(ctx != NULL);
 
     size_t offset;
-    if (option_is_pair(opt) && kind(ctx->argv[1]) == ARGV_KIND_VALUE) {
+    if (optionIsPair(opt) && kind(ctx->argv[1]) == ARGV_KIND_VALUE) {
         offset = 2;
         ctx->out[index] = ctx->argv[1];
     } else {
@@ -140,20 +140,20 @@ Result take_option(const size_t index, const Option *opt, Context *ctx) {
     return parse(ctx);
 }
 
-bool option_is_pair(const Option *opt) {
+bool optionIsPair(const Option *opt) {
     assert(opt != NULL);
 
     return opt->valueType != NULL;
 }
 
-bool match_short(const char *arg, const Option *opt) {
+bool matchShort(const char *arg, const Option *opt) {
     assert(arg != NULL);
     assert(opt != NULL);
 
     return opt->key != ' ' && arg[1] == opt->key && arg[2] == '\0';
 }
 
-bool match_long(const char *arg, const Option *opt) {
+bool matchLong(const char *arg, const Option *opt) {
     assert(arg != NULL);
     assert(opt != NULL);
 
