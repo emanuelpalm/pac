@@ -29,7 +29,7 @@ LIBS              ?= ${OS_LIBS}
 MKDIRP            ?= mkdir -p
 RM                ?= rm -f
 RMDIR             ?= rm -Rf
-XFLAGS            ?= -std=c11 -Wall -Wpedantic -Wextra
+XFLAGS            ?= -std=c99 -Wall -Wpedantic -Wextra
 
 ifdef DEBUG
 CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0 -DDEBUG
