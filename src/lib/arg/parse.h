@@ -60,7 +60,7 @@ void arg_fprintOption(FILE *stream, const arg_Option *option);
 
 /// Prints `options` to `stream`.
 ///
-/// \param stream Target output stream.
+/// \param stream  Target output stream.
 /// \param options Pointer to zero-terminated array of CLI options.
 void arg_fprintOptions(FILE *stream, const arg_Option options[]);
 
@@ -114,11 +114,11 @@ void arg_fprintOptions(FILE *stream, const arg_Option options[]);
 /// }
 /// ```
 ///
-/// \param argc Amount of elements in `argv`, excluding NULL-terminator.
-/// \param argv Pointer to NULL-terminated list of C strings.
+/// \param argc    Amount of elements in `argv`, excluding NULL-terminator.
+/// \param argv    Pointer to NULL-terminated list of C strings.
 /// \param options Pointer to zero-terminated array of CLI options.
-/// \param out Pointer to array to receive option values.
-/// \return Parse result.
+/// \param out     Pointer to array to receive option values.
+/// \returns       Parse result.
 ///
 /// \see arg_Option
 /// \see arg_Result
