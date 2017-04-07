@@ -98,7 +98,7 @@
 /// If assertion fails, the currently executed test is failed and the assert
 /// statement is printed.
 ///
-/// \param t Pointer to test context.
+/// \param t          Pointer to test context.
 /// \param expression Expression to evaluate.
 ///
 /// \see unit_failf()
@@ -110,10 +110,10 @@
 /// format string, with any
 /// provided arguments, is printed.
 ///
-/// \param t Pointer to test context.
+/// \param t          Pointer to test context.
 /// \param expression Expression to evaluate.
-/// \param format String format.
-/// \param ... Format arguments.
+/// \param format     String format.
+/// \param ...        Format arguments.
 ///
 /// \see unit_failf()
 #define UNIT_ASSERTF(t, expression, ...)           \
@@ -145,9 +145,9 @@
 /// If assertion fails, the currently executed test is failed and the compared
 /// numbers are printed.
 ///
-/// \param t Pointer to test context.
-/// \param a First double comparand.
-/// \param b Second double comparand.
+/// \param t         Pointer to test context.
+/// \param a         First double comparand.
+/// \param b         Second double comparand.
 /// \param precision Precision of double comparison (e.g. 0.005).
 #define UNIT_ASSERT_EQF(t, a, b, precision)                       \
     do {                                                          \
@@ -237,6 +237,8 @@
 /// The macro is intended to be use together with the unit_pass(), unit_failf()
 /// and unit_skipf() functions in order for these to be able to properly print
 /// the contexts in which they are called.
+///
+/// \returns Call trace.
 ///
 /// \see unit_Trace
 #define UNIT_TRACE() \
