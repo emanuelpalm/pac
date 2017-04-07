@@ -46,16 +46,16 @@ endif
 # Each C build target requires a list of the .c source files required to build
 # it. Header files are resolved automatically.
 
-CFILES_PAC        := \
-	src/bin/pac/main.c \
+CFILES_RIM        := \
+	src/bin/rim/main.c \
 	src/lib/arg/parse.c \
 
-CFILES_PACDOC     := \
-	src/bin/pacdoc/main.c \
+CFILES_RIMDOC     := \
+	src/bin/rimdoc/main.c \
 	src/lib/arg/parse.c \
 
-CFILES_PACFMT     := \
-	src/bin/pacfmt/main.c \
+CFILES_RIMFMT     := \
+	src/bin/rimfmt/main.c \
 	src/lib/arg/parse.c \
 
 CFILES_TESTS      := \
@@ -66,16 +66,16 @@ CFILES_TESTS      := \
 # Other build variables.
 
 objectify          = $(addprefix ${OUTDIR}/,$(subst /,-,$(1:src/%.c=%.o)))
-OFILES_PAC        := $(call objectify,$(CFILES_PAC))
-OFILES_PACDOC     := $(call objectify,$(CFILES_PACDOC))
-OFILES_PACFMT     := $(call objectify,$(CFILES_PACFMT))
+OFILES_RIM        := $(call objectify,$(CFILES_RIM))
+OFILES_RIMDOC     := $(call objectify,$(CFILES_RIMDOC))
+OFILES_RIMFMT     := $(call objectify,$(CFILES_RIMFMT))
 OFILES_TESTS      := $(call objectify,$(CFILES_TESTS))
 
 # Special build commands.
 
 default: all
 
-all: pac pacdoc pacfmt tests doc
+all: rim rimdoc rimfmt tests doc
 
 clean:
 	$(foreach F,$(wildcard target),${RMDIR} $F;)
@@ -89,17 +89,17 @@ help:
 	@echo "  make clean       - Delete all built files."
 	@echo "  make doc         - Build developer documentation."
 	@echo "  make help        - Show this help message."
-	@echo "  make pac         - Build pac binary."
-	@echo "  make pacdoc      - Build pacdoc binary."
-	@echo "  make pacfmt      - Build pacfmt binary."
+	@echo "  make rim         - Build rim binary."
+	@echo "  make rimdoc      - Build rimdoc binary."
+	@echo "  make rimfmt      - Build rimfmt binary."
 	@echo "  make tests       - Build tests binary."
 
-pac: ${OUTDIR}/pac${BINEXT}
-pacdoc: ${OUTDIR}/pacdoc${BINEXT}
-pacfmt: ${OUTDIR}/pacfmt${BINEXT}
+rim: ${OUTDIR}/rim${BINEXT}
+rimdoc: ${OUTDIR}/rimdoc${BINEXT}
+rimfmt: ${OUTDIR}/rimfmt${BINEXT}
 tests: ${OUTDIR}/tests${BINEXT}
 
-.PHONY: all clean default doc help pac pacdoc pacfmt tests
+.PHONY: all clean default doc help rim rimdoc rimfmt tests
 
 # Dependency file inclusion.
 -include $(shell find . -iname *.d)
@@ -115,9 +115,9 @@ target/Doxyfile: Doxyfile.sh .git/index src/lib/meta/version.h
 src/lib/meta/version.h: .git/index
 	cd $(dir $@) && sh version.sh
 
-${OUTDIR}/pac${BINEXT}: src/lib/meta/version.h ${OFILES_PAC}
-${OUTDIR}/pacdoc${BINEXT}: src/lib/meta/version.h ${OFILES_PACDOC}
-${OUTDIR}/pacfmt${BINEXT}: src/lib/meta/version.h ${OFILES_PACFMT}
+${OUTDIR}/rim${BINEXT}: src/lib/meta/version.h ${OFILES_RIM}
+${OUTDIR}/rimdoc${BINEXT}: src/lib/meta/version.h ${OFILES_RIMDOC}
+${OUTDIR}/rimfmt${BINEXT}: src/lib/meta/version.h ${OFILES_RIMFMT}
 ${OUTDIR}/tests${BINEXT}: src/lib/meta/version.h ${OFILES_TESTS}
 
 # Build rules for general file types.

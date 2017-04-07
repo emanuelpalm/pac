@@ -1,18 +1,18 @@
-#ifndef LIB_PVM_HEAP_H
-#define LIB_PVM_HEAP_H
+#ifndef LIB_RVM_HEAP_H
+#define LIB_RVM_HEAP_H
 
-/// PVM heap type and utilities.
+/// RVM heap type and utilities.
 ///
 /// @file
 
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct pvm_Heap pvm_Heap;
+typedef struct rvm_Heap rvm_Heap;
 
-/// Represents a block of contiguous memory containing pvm_Value objects and
+/// Represents a block of contiguous memory containing rvm_Value objects and
 /// their associated data.
-struct pvm_Heap {
+struct rvm_Heap {
     /// Capacity of heap, in bytes.
     size_t capacity;
 

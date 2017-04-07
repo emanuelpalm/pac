@@ -22,7 +22,7 @@ mkdir -p $(dirname $TARGET)
 
 echo "\
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = pac
+PROJECT_NAME           = RIM
 PROJECT_NUMBER         = $PROJECT_NUMBER
 PROJECT_BRIEF          =
 PROJECT_LOGO           =
