@@ -91,6 +91,7 @@
 #include <stdio.h>
 #include <stdnoreturn.h>
 #include <string.h>
+#include "../meta/attr.h"
 
 /// Asserts that given expression is true.
 ///
@@ -333,7 +334,8 @@ void unit_namedTest(unit_S *s, const char *name, unit_FnTest test);
 /// Passes test `t`.
 ///
 /// \param t Pointer to unit test context.
-noreturn void unit_pass(unit_T *t);
+void unit_pass(unit_T *t)
+    ATTR_NORETURN();
 
 /// Fails current test, reporting given formatted message.
 ///
@@ -352,7 +354,9 @@ noreturn void unit_pass(unit_T *t);
 /// \param ...    Format arguments.
 ///
 /// \see unit_failf()
-noreturn void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...);
+void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...)
+    ATTR_NORETURN()
+    ATTR_PRINTF(3, 4);
 
 /// Skips current test, reporting given formatted message.
 ///
@@ -371,6 +375,8 @@ noreturn void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...);
 /// \param ...    Format arguments.
 ///
 /// \see unit_skipf()
-noreturn void unit_skiptf(unit_T *t, unit_Trace trace, const char *format, ...);
+void unit_skiptf(unit_T *t, unit_Trace trace, const char *format, ...)
+    ATTR_NORETURN()
+    ATTR_PRINTF(3, 4);
 
 #endif
