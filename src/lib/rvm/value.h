@@ -17,6 +17,9 @@
 /// Bit mask for extracting rvm_Value index from uint64_t flags.
 #define RVM_VALUE_FLAGS_INDEX 0x0ffffffffffffff8
 
+/// Indicates that some rvm_Value lacks an index.
+#define RVM_VALUE_INDEX_NONE 0
+
 typedef struct rvm_ValueArray rvm_ValueArray;
 typedef struct rvm_ValueBytes rvm_ValueBytes;
 typedef struct rvm_ValueClosure rvm_ValueClosure;
@@ -115,7 +118,9 @@ struct rvm_Value {
     /// Contains bitmask fields accessible using the following masks:
     /// - RVM_VALUE_FLAGS_KIND
     /// - RVM_VALUE_FLAGS_INDEX
-    /// - RVM_VALUE_FLAGS_MARK
+    ///
+    /// \see rvm_getValueKind()
+    /// \see rvm_getValueIndex()
     uint64_t flags;
 
     /// Value body.
@@ -146,21 +151,11 @@ static inline rvm_ValueKind rvm_getValueKind(rvm_Value *value) {
 /// Resolves index of given value.
 ///
 /// \param value Inspected value.
-/// \returns     Value index.
+/// \returns     Value index, or RVM_VALUE_INDEX_NONE no such is available.
 ///
 /// \see rvm_Value
 static inline uint64_t rvm_getValueIndex(rvm_Value *value) {
     return value->flags & RVM_VALUE_FLAGS_INDEX;
-}
-
-/// Determines whether or not given value is indexed.
-///
-/// \param value Inspected value.
-/// \returns     Status.
-///
-/// \see rvm_Value
-static inline bool rvm_isValueIndexed(rvm_Value *value) {
-    return rvm_getValueIndex(value) != 0;
 }
 
 #endif
