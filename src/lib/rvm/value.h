@@ -92,14 +92,14 @@ struct rvm_ValueSymbol {
 /// The ordinal of each kind must be fit inside the RVM_VALUE_FLAGS_KIND
 /// bitmask.
 typedef enum rvm_ValueKind {
-    RVM_VALUE_UNDEFINED = 0,
-    RVM_VALUE_BYTES = 1,
-    RVM_VALUE_NUMBER = 2,
-    RVM_VALUE_SYMBOL = 3,
-    RVM_VALUE_CLOSURE = 4,
-    RVM_VALUE_ARRAY = 5,
-    RVM_VALUE_LINK = 6,
-    RVM_VALUE_LAZY = 7,
+    RVM_VALUE_UNDEFINED = 0x0,
+    RVM_VALUE_BYTES = 0x1,
+    RVM_VALUE_NUMBER = 0x2,
+    RVM_VALUE_SYMBOL = 0x3,
+    RVM_VALUE_CLOSURE = 0x4,
+    RVM_VALUE_ARRAY = 0x5,
+    RVM_VALUE_LINK = 0x6,
+    RVM_VALUE_LAZY = 0x7,
 } rvm_ValueKind;
 
 /// An RVM value.
@@ -151,7 +151,7 @@ static inline rvm_ValueKind rvm_getValueKind(rvm_Value *value) {
 /// Resolves index of given value.
 ///
 /// \param value Inspected value.
-/// \returns     Value index, or RVM_VALUE_INDEX_NONE no such is available.
+/// \returns     Value index, or RVM_VALUE_INDEX_NONE if no such is available.
 ///
 /// \see rvm_Value
 static inline uint64_t rvm_getValueIndex(rvm_Value *value) {
