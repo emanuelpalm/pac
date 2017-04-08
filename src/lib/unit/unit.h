@@ -89,7 +89,6 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdnoreturn.h>
 #include <string.h>
 #include "../meta/attr.h"
 
