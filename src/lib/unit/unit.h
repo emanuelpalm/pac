@@ -4,9 +4,9 @@
 /// Unit testing framework.
 ///
 /// The framework divides individual unit tests into groups referred to as
-/// suites. All suites and unit tests are defined as regular C functions. Suites
-/// declare their tests by calling unit_test(), and the special unit_main()
-/// function declares all suites by calling unit_suite().
+/// suites. All suites and unit tests are defined as regular C functions.
+/// Suites declare their tests by calling unit_test(), and the special
+/// unit_main() function declares all suites by calling unit_suite().
 ///
 /// By convention, each suite should be declared in a separate file, with its
 /// unit tests being inside the same file. Suite files should have file names
