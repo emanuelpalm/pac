@@ -28,6 +28,7 @@ PROJECT_BRIEF          =
 PROJECT_LOGO           = ../logo.svg
 OUTPUT_DIRECTORY       = doc/
 OPTIMIZE_OUTPUT_FOR_C  = YES
+EXTRACT_STATIC         = YES
 JAVADOC_AUTOBRIEF      = YES
 INPUT                  = ../src/
 INPUT_ENCODING         = UTF-8
