@@ -14,7 +14,7 @@
 #define ATTR_NORETURN() \
     __attribute__((__noreturn__))
 
-#define ATTR_PRINTF(fmt, va_args) \
+#define ATTR_FORMAT_PRINTF(fmt, va_args) \
     __attribute__((format (printf, (fmt), (va_args))))
 
 #else
@@ -36,12 +36,12 @@
 ///
 /// ```c
 /// void log_printf(int logLevel, const char *format, ...)
-///     ATTR_PRINTF(2, 3);
+///     ATTR_FORMAT_PRINTF(2, 3);
 /// ```
 ///
 /// \param fmt     The position of the format argument, starting from 1.
 /// \param va_args The position of the variadic argument, starting from 1.
-#define ATTR_PRINTF(fmt, va_args)
+#define ATTR_FORMAT_PRINTF(fmt, va_args)
 
 #endif
 

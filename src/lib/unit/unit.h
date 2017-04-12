@@ -355,7 +355,7 @@ void unit_pass(unit_T *t) ATTR_NORETURN();
 ///
 /// \see unit_failf()
 void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...)
-    ATTR_NORETURN() ATTR_PRINTF(3, 4);
+    ATTR_NORETURN() ATTR_FORMAT_PRINTF(3, 4);
 
 /// Skips current test, reporting given formatted message.
 ///
@@ -375,6 +375,6 @@ void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...)
 ///
 /// \see unit_skipf()
 void unit_skiptf(unit_T *t, unit_Trace trace, const char *format, ...)
-    ATTR_NORETURN() ATTR_PRINTF(3, 4);
+    ATTR_NORETURN() ATTR_FORMAT_PRINTF(3, 4);
 
 #endif
