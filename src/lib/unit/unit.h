@@ -86,7 +86,7 @@
 ///
 /// \see unit_main()
 
-#include "../meta/attr.h"
+#include "../meta/attribute.h"
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -335,7 +335,7 @@ void unit_namedTest(unit_S *s, const char *name, unit_FnTest test);
 /// Passes test `t`.
 ///
 /// \param t Pointer to unit test context.
-void unit_pass(unit_T *t) ATTR_NORETURN();
+void unit_pass(unit_T *t) ATTRIBUTE_NORETURN();
 
 /// Fails current test, reporting given formatted message.
 ///
@@ -355,7 +355,7 @@ void unit_pass(unit_T *t) ATTR_NORETURN();
 ///
 /// \see unit_failf()
 void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...)
-    ATTR_NORETURN() ATTR_FORMAT_PRINTF(3, 4);
+    ATTRIBUTE_NORETURN() ATTRIBUTE_FORMAT_PRINTF(3, 4);
 
 /// Skips current test, reporting given formatted message.
 ///
@@ -375,6 +375,6 @@ void unit_failtf(unit_T *t, unit_Trace trace, const char *format, ...)
 ///
 /// \see unit_skipf()
 void unit_skiptf(unit_T *t, unit_Trace trace, const char *format, ...)
-    ATTR_NORETURN() ATTR_FORMAT_PRINTF(3, 4);
+    ATTRIBUTE_NORETURN() ATTRIBUTE_FORMAT_PRINTF(3, 4);
 
 #endif
