@@ -61,6 +61,7 @@ CFILES_RIMFMT     := \
 CFILES_TESTS      := \
 	src/tests/main.unit.c \
 	src/tests/mem/string.unit.c \
+	src/tests/rvm/error.unit.c \
 	src/lib/arg/parse.c \
 	src/lib/unit/unit.c \
 
