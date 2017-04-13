@@ -201,14 +201,13 @@
 /// \param t Pointer to test context.
 /// \param a First C string comparand.
 /// \param b Second C string comparand.
-#define UNIT_ASSERT_EQS(t, a, b)                                              \
-    do {                                                                      \
-        const char *a0 = (a);                                                 \
-        const char *b0 = (b);                                                 \
-        if (a0 == NULL || b0 == NULL || strcmp(a0, b0) != 0) {                \
-            unit_failtf(t, UNIT_TRACE(), "\"%*.s\" != \"%*.s\"", length0, a0, \
-                        length0, b0);                                         \
-        }                                                                     \
+#define UNIT_ASSERT_EQS(t, a, b)                                      \
+    do {                                                              \
+        const char *a0 = (a);                                         \
+        const char *b0 = (b);                                         \
+        if (a0 == NULL || b0 == NULL || strcmp(a0, b0) != 0) {        \
+            unit_failtf(t, UNIT_TRACE(), "\"%s\" != \"%s\"", a0, b0); \
+        }                                                             \
     } while (0)
 
 /// Asserts that given unsigned integers are equal.
