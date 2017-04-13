@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
+#include "../mem/string.h"
 
 /// Bit mask for extracting free bit from uint64_t flags.
 #define RVM_ERROR_FLAGS_FREE 0x8000000000000000
@@ -89,15 +89,8 @@ static inline rvm_Error rvm_toError(rvm_ErrorKind kind, char *message) {
 /// Creates new error by copying given kind and message.
 ///
 /// It is safe to provide a `NULL` message.
-static inline rvm_Error rvm_newError(rvm_ErrorKind kind, char *message) {
-    char *buf = NULL;
-    if (message != NULL) {
-        const size_t len = strlen(message) + 1;
-        if ((buf = malloc(len)) != NULL) {
-            strncpy(buf, message, len);
-        }
-    }
-    return rvm_toError(kind, buf);
+static inline rvm_Error rvm_newError(rvm_ErrorKind kind, const char *message) {
+    return rvm_toError(kind, mem_newString(message));
 }
 
 /// Frees any dynamically allocated resources held by given error.
