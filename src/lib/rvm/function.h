@@ -26,4 +26,3 @@ struct rvm_Function {
 };
 
 #endif
-
