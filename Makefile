@@ -32,7 +32,7 @@ RMDIR             ?= rm -Rf
 XFLAGS            ?= -std=c99 -Wall -Wpedantic -Wextra
 
 ifdef DEBUG
-CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0 -DDEBUG
+CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0
 LDFLAGS           ?= ${OS_LDFLAGS} -O0
 OUTDIR            ?= target/debug
 else
