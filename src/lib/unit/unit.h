@@ -35,34 +35,34 @@
 /// // math.unit.c
 /// #include "unit.h"
 ///
-/// void should_add(unit_T *t) {
+/// void shouldAdd(unit_T *t) {
 ///     int x = 10 + 1;
 ///     UNIT_ASSERT_EQI(t, 11, x); // Passes.
 /// }
 ///
-/// void should_sub(unit_T *t) {
+/// void shouldSub(unit_T *t) {
 ///     UNIT_ASSERT(t, (10 - 1) == 99); // Fails.
 /// }
 ///
 /// void math(unit_S *s) {
-///     unit_test(s, should_add);
-///     unit_test(s, should_sub);
+///     unit_test(s, shouldAdd);
+///     unit_test(s, shouldSub);
 /// }
 ///
 /// // text.unit.c
 /// #include "unit.h"
 ///
-/// void should_uppercase(unit_T *t) {
+/// void shouldUppercase(unit_T *t) {
 ///     unit_pass(t); // Passes.
 /// }
 ///
-/// void should_lowercase(unit_T *t) {
+/// void shouldLowercase(unit_T *t) {
 ///     unit_skipf(t, "Cannot lowercase."); // Skipped.
 /// }
 ///
 /// void text(unit_S *s) {
-///     unit_test(s, should_uppercase);
-///     unit_test(s, should_lowercase);
+///     unit_test(s, shouldUppercase);
+///     unit_test(s, shouldLowercase);
 /// }
 /// ```
 ///
@@ -72,7 +72,7 @@
 ///
 /// ```sh
 /// $ ./tests
-/// FAIL math.should_sub (/path/to/math.unit.c:9)
+/// FAIL math.shouldSub (/path/to/math.unit.c:9)
 ///     (10 - 1) == 99
 ///
 /// TOTAL Passed 2, failed 1, skipped 1.
