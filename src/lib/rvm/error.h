@@ -88,6 +88,10 @@ static inline rvm_Error rvm_intoError(rvm_ErrorKind kind, char *message) {
 
 /// Creates new error by copying given kind and message.
 ///
+/// The created rvm_Error object takes ownership of an allocated copy of given
+/// message, which is provided to free() when the error is given to
+/// rvm_freeError().
+///
 /// It is safe to provide a `NULL` message.
 static inline rvm_Error rvm_newError(rvm_ErrorKind kind, const char *message) {
     return rvm_intoError(kind, mem_newString(message));
@@ -95,7 +99,7 @@ static inline rvm_Error rvm_newError(rvm_ErrorKind kind, const char *message) {
 
 /// Frees any dynamically allocated resources held by given error.
 ///
-/// \param error Destroyed error.
+/// \param error Error to free.
 ///
 /// \see rvm_Error
 static inline void rvm_freeError(rvm_Error error) {
