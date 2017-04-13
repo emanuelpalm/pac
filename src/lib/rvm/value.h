@@ -5,11 +5,11 @@
 ///
 /// \file
 
-#include "function.h"
-#include "heap.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "function.h"
+#include "heap.h"
 
 /// Bit mask for extracting rvm_ValueKind from uint64_t flags.
 #define RVM_VALUE_FLAGS_KIND 0x0000000000000007
