@@ -80,7 +80,7 @@ static inline rvm_Error rvm_asError(rvm_ErrorKind kind, const char *message) {
 /// rvm_freeError().
 ///
 /// It is safe to provide a `NULL` message.
-static inline rvm_Error rvm_toError(rvm_ErrorKind kind, char *message) {
+static inline rvm_Error rvm_intoError(rvm_ErrorKind kind, char *message) {
     return (rvm_Error){
         .flags = kind | RVM_ERROR_FLAGS_FREE, .message = message,
     };
@@ -90,7 +90,7 @@ static inline rvm_Error rvm_toError(rvm_ErrorKind kind, char *message) {
 ///
 /// It is safe to provide a `NULL` message.
 static inline rvm_Error rvm_newError(rvm_ErrorKind kind, const char *message) {
-    return rvm_toError(kind, mem_newString(message));
+    return rvm_intoError(kind, mem_newString(message));
 }
 
 /// Frees any dynamically allocated resources held by given error.
