@@ -13,6 +13,10 @@
 
 #if __GNUC__ >= 3
 #define ATTRIBUTE_NORETURN() __attribute__((__noreturn__))
+#elif _MSC_VER => 1400
+#define ATTRIBUTE_NORETURN() __declspec(noreturn)
+#elif __COMPCERT__ >= 1
+#define ATTRIBUTE_NORETURN() __attribute__(noreturn)
 #else
 /// Indicates that a function never returns after being called.
 ///
