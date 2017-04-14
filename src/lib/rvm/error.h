@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include "../mem/string.h"
 
-/// Bit mask for extracting free bit from uint64_t flags.
-#define RVM_ERROR_FLAGS_FREE 0x8000000000000000
+/// Bit mask for extracting free bit from uint16_t flags.
+#define RVM_ERROR_FLAGS_FREE 0x8000
 
-/// Bit mask for extracting rvm_ErrorKind from uint64_t flags.
-#define RVM_ERROR_FLAGS_KIND 0x00000000000000ff
+/// Bit mask for extracting rvm_ErrorKind from uint16_t flags.
+#define RVM_ERROR_FLAGS_KIND 0x7fff
 
 typedef struct rvm_Error rvm_Error;
 
@@ -22,9 +22,9 @@ typedef struct rvm_Error rvm_Error;
 /// The ordinal of each kind must be fit inside the RVM_ERROR_FLAGS_KIND
 /// bitmask.
 typedef enum rvm_ErrorKind {
-    RVM_ERROR_NONE = 0x00,
-    RVM_ERROR_NOMEMORY = 0x01,
-    RVM_ERROR_USER = 0xff,
+    RVM_ERROR_NONE = 0x0000,
+    RVM_ERROR_NOMEMORY = 0x0001,
+    RVM_ERROR_USER = 0x7fff,
 } rvm_ErrorKind;
 
 /// An RVM error.
@@ -46,7 +46,7 @@ struct rvm_Error {
     /// - RVM_ERROR_FLAGS_KIND
     ///
     /// \see rvm_getErrorKind()
-    uint64_t flags;
+    uint16_t flags;
 
     /// Error message.
     ///
