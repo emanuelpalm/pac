@@ -20,28 +20,28 @@ echo "\
 #ifndef LIB_META_VERSION_H
 #define LIB_META_VERSION_H
 
-/// Project version data.
+/// Project version information.
 ///
 /// This file is generated from a shell script. Do not edit directly.
 ///
 /// \\\\file
 
-/// Project version identifier C string, on the form \`MAJOR.MINOR.PATCH\`.
+/// Project version C string, on the form \`MAJOR.MINOR.PATCH\`.
 #define META_VERSION \"$VERSION\"
 
-/// Project major version identifier integer.
+/// Project major version integer.
 #define META_VERSION_MAJOR $VERSION_MAJOR
 
-/// Project minor version identifier integer.
+/// Project minor version integer.
 #define META_VERSION_MINOR $VERSION_MINOR
 
-/// Project patch version identifier integer.
+/// Project patch version integer.
 #define META_VERSION_PATCH $VERSION_PATCH
 
 /// Project revision hash C string.
 #define META_VERSION_HASH \"$VERSION_HASH\"
 
-/// Project revision creation time, as UNIX timestamp.
+/// Project revision creation time, as seconds since 1970-01-01 00:00:00.
 #define META_VERSION_UNIXTIME $VERSION_UNIXTIME
 
 #endif" > $TARGET
