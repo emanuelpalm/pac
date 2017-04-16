@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include "../mem/string.h"
+#include "../../util/mem/str.h"
 
 /// Bit mask for extracting free bit from uint16_t flags.
 #define RVM_ERROR_FLAGS_FREE 0x8000
@@ -69,7 +69,7 @@ struct rvm_Error {
 /// It is safe to provide a `NULL` message.
 static inline rvm_Error rvm_asError(rvm_ErrorKind kind, const char *message) {
     return (rvm_Error){
-        .flags = kind, .message = (char *)message,
+        .flags = (uint16_t)kind, .message = (char *)message,
     };
 }
 
@@ -82,7 +82,7 @@ static inline rvm_Error rvm_asError(rvm_ErrorKind kind, const char *message) {
 /// It is safe to provide a `NULL` message.
 static inline rvm_Error rvm_intoError(rvm_ErrorKind kind, char *message) {
     return (rvm_Error){
-        .flags = kind | RVM_ERROR_FLAGS_FREE, .message = message,
+        .flags = (uint16_t)(kind | RVM_ERROR_FLAGS_FREE), .message = message,
     };
 }
 
@@ -115,7 +115,7 @@ static inline void rvm_freeError(rvm_Error error) {
 ///
 /// \see rvm_Error
 static inline rvm_ErrorKind rvm_getErrorKind(rvm_Error error) {
-    return error.flags & RVM_ERROR_FLAGS_KIND;
+    return (rvm_ErrorKind)(error.flags & RVM_ERROR_FLAGS_KIND);
 }
 
 #endif

@@ -32,7 +32,7 @@ RMDIR             ?= rm -Rf
 XFLAGS            ?= -std=c99 -Wall -Wpedantic -Wextra
 
 ifdef DEBUG
-CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0
+CFLAGS            ?= ${OS_CFLAGS} ${XFLAGS} -O0 -g
 LDFLAGS           ?= ${OS_LDFLAGS} -O0
 OUTDIR            ?= target/debug
 else
@@ -48,26 +48,26 @@ endif
 
 CFILES_RIM        := \
 	src/bin/rim/main.c \
-	src/lib/arg/parse.c \
+	src/util/arg/parse.c \
 
 CFILES_RIMDOC     := \
 	src/bin/rimdoc/main.c \
-	src/lib/arg/parse.c \
+	src/util/arg/parse.c \
 
 CFILES_RIMFMT     := \
 	src/bin/rimfmt/main.c \
-	src/lib/arg/parse.c \
+	src/util/arg/parse.c \
 
 CFILES_TESTS      := \
-	src/tests/main.unit.c \
-	src/tests/mem/string.unit.c \
-	src/tests/rvm/error.unit.c \
-	src/lib/arg/parse.c \
-	src/lib/unit/unit.c \
+	tests/lib/rvm/error.unit.c \
+	tests/main.unit.c \
+	tests/util/mem/str.unit.c \
+	src/util/arg/parse.c \
+	src/util/unit/unit.c \
 
 # Other build variables.
 
-objectify          = $(addprefix ${OUTDIR}/,$(subst /,-,$(1:src/%.c=%.o)))
+objectify          = $(addprefix ${OUTDIR}/,$(subst /,-,$(1:%.c=%.o)))
 OFILES_RIM        := $(call objectify,$(CFILES_RIM))
 OFILES_RIMDOC     := $(call objectify,$(CFILES_RIMDOC))
 OFILES_RIMFMT     := $(call objectify,$(CFILES_RIMFMT))
@@ -104,30 +104,30 @@ tests: ${OUTDIR}/tests${BINEXT}
 .PHONY: all clean default doc help rim rimdoc rimfmt tests
 
 # Dependency file inclusion.
--include $(shell find . -iname *.d)
+-include $(shell find ${OUTDIR} -iname *.d 2>/dev/null)
 
 # Build rules for concrete targets.
 
 target/doc: target/Doxyfile
 	cd target && doxygen
 
-target/Doxyfile: Doxyfile.sh .git/index src/lib/meta/version.h
+target/Doxyfile: Doxyfile.sh .git/index src/util/meta/version.h
 	sh Doxyfile.sh
 
-src/lib/meta/version.h: .git/index
+src/util/meta/version.h: .git/index
 	cd $(dir $@) && sh version.sh
 
-${OUTDIR}/rim${BINEXT}: src/lib/meta/version.h ${OFILES_RIM}
-${OUTDIR}/rimdoc${BINEXT}: src/lib/meta/version.h ${OFILES_RIMDOC}
-${OUTDIR}/rimfmt${BINEXT}: src/lib/meta/version.h ${OFILES_RIMFMT}
-${OUTDIR}/tests${BINEXT}: src/lib/meta/version.h ${OFILES_TESTS}
+${OUTDIR}/rim${BINEXT}: src/util/meta/version.h ${OFILES_RIM}
+${OUTDIR}/rimdoc${BINEXT}: src/util/meta/version.h ${OFILES_RIMDOC}
+${OUTDIR}/rimfmt${BINEXT}: src/util/meta/version.h ${OFILES_RIMFMT}
+${OUTDIR}/tests${BINEXT}: src/util/meta/version.h ${OFILES_TESTS}
 
 # Build rules for general file types.
 .SUFFIXES:
 
 %.o:
 	@${MKDIRP} $(dir $@)
-	${CC} ${CFLAGS} -c -MMD src/$(subst -,/,$(notdir $*)).c -o $@
+	${CC} ${CFLAGS} -c -MMD $(subst -,/,$(notdir $*)).c -o $@
 
 %${BINEXT}:
 	@${MKDIRP} $(dir $@)

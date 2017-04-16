@@ -2,7 +2,7 @@
 /target/
 
 # Generated files.
-/src/lib/meta/version.h
+/src/util/meta/version.h
 
 # Temporary files.
 *~

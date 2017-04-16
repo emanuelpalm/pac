@@ -1,5 +1,5 @@
-#include "../lib/meta/version.h"
-#include "../lib/unit/unit.h"
+#include "../src/util/meta/version.h"
+#include "../src/util/unit/unit.h"
 
 void mem_string(unit_S *s);
 void rvm_error(unit_S *s);
@@ -10,4 +10,3 @@ void unit_main(unit_G *g) {
     unit_suite(g, mem_string);
     unit_suite(g, rvm_error);
 }
-

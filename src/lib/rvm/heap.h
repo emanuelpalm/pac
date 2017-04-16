@@ -3,89 +3,140 @@
 
 /// RVM heap type and utilities.
 ///
-/// @file
+/// \file
 
-#include "error.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "error.h"
+#include "value.h"
 
 typedef struct rvm_Heap rvm_Heap;
+typedef struct rvm_HeapResult rvm_HeapResult;
 
 /// Represents a block of contiguous memory containing rvm_Value objects and
-/// their associated data.
-///
-/// ## Initalization
-///
-/// Heaps are first allocated, typically on the stack, and then initialized by
-/// mounting them via pvm_mount() or pvm_mountTemporary().
+/// associated data.
 ///
 /// ## Destruction
 ///
-/// Once no longer required, each initialized heap must be unmounted using the
-/// pvm_unmount() function.
+/// Once no longer used, heaps must be freed using pvm_freeHeap().
 ///
-/// \see rvm_mount()
-/// \see rvm_mountTemporary()
-/// \see rvm_unmount()
+/// \see rvm_bufferAsHeap()
+/// \see rvm_fileAsHeap()
+/// \see rvm_fileIntoHeap()
 struct rvm_Heap {
-    /// Capacity of heap, in bytes.
-    size_t capacity;
+    /// Size of heap, in bytes.
+    uint64_t length;
 
-    /// Amount of currently used heap bytes, from beginning.
-    size_t length;
+    /// Current heap revision.
+    uint64_t revision;
 
-    /// Pointer to first byte in heap.
-    uint8_t *bytes;
+    /// Pointer to private heap data.
+    void *internal;
 
-    /// File associated with heap, if any.
-    struct {
-        /// System file handle, or -1 if none.
-        int descriptor;
+    /// Closes given heap, freeing up any resources held.
+    ///
+    /// \param self This heap.
+    ///
+    /// \see rvm_freeHeap()
+    void (*free)(rvm_Heap *self);
 
-        /// File path, or NULL if none.
-        const char *path;
-    } file;
+    rvm_Error (*get)(rvm_Heap *self, rvm_Value *out, const uint64_t revision);
+
+    /// Sets heap value, creating a new revision.
+    ///
+    /// \param self  This heap.
+    /// \param value Value to set.
+    rvm_Error (*set)(rvm_Heap *self, const rvm_Value value);
+
+    /// Synchronizes heap contents.
+    ///
+    /// When the function returns, any prior heap changes are guaranteed to be
+    /// committed to any underlying medium. Note that the calling thread is
+    /// suspended until the operation completes.
+    ///
+    /// \param self This heap.
+    rvm_Error (*sync)(rvm_Heap *self);
 };
 
-/// Attempts to mount file at given path as an RVM heap with given capacity.
+/// Carries result of an attempt to create a new heap.
 ///
-/// The file is created if it does not exist.
-///
-/// The given capacity determines how many bytes of the process address space
-/// are allocated for the heap. The provided capacity will be rounded up to the
-/// nearest useful size, which on most systems will be a multiple of the system
-/// page size. The capacity may be larger than the actual storage capacity of
-/// the computer, as only the portions of the heap that are actually used are
-/// stored to disk.
-///
-/// \param heap     Pointer to uninitialized heap structure to initialize.
-/// \param path     Path to file to mount.
-/// \param capacity Size of process address space to request for heap.
-/// \returns        Error object, indicating any issues.
-///
-/// \see rvm_Heap
-/// \see rvm_unmount()
-rvm_Error rvm_mount(rvm_Heap *heap, const char *path, const size_t capacity);
+/// \see rvm_bufferAsHeap()
+/// \see rvm_fileAsHeap()
+/// \see rvm_fileIntoHeap()
+struct rvm_HeapResult {
+    /// Indicates whether creation was successful.
+    bool ok;
 
-/// Attempts to mount a temporary RVM heap with given capacity.
-///
-/// The capacity is on typical system limited to the amount of primary and swap
-/// memory the operating systems is allowed to provide to processes.
-///
-/// \param heap     Pointer to uninitialized heap structure to initialize.
-/// \param capacity Size of process address space to request for heap.
-/// \returns        Error object, indicating any issues.
-///
-/// \see rvm_Heap
-/// \see rvm_unmount()
-rvm_Error rvm_mountTemporary(rvm_Heap *heap, const size_t capacity);
+    union {
+        /// If creation was unsuccessful, carries indication of cause.
+        rvm_Error error;
 
-/// Unmounts given RVM heap, freeing up any resources held.
+        /// If creation was successful, carries created heap.
+        rvm_Heap heap;
+    } as;
+};
+
+/// Initializes heap with provided buffer of length bytes as memory.
 ///
-/// \param heap Heap to unmount.
+/// Ownership is not taken of the given buffer, meaning that it will not be
+/// released when the heap is freed. As the buffer is not owned, no attempt
+/// will be made to resize it if more space would be required.
+///
+/// \param buffer Target memory buffer.
+/// \param length Length of memory buffer, in bytes.
+/// \returns      Error object, indicating any issues.
 ///
 /// \see rvm_Heap
-void rvm_unmount(rvm_Heap *heap);
+/// \see rvm_freeHeap()
+rvm_HeapResult rvm_bufferAsHeap(uint8_t *buffer, const size_t length);
+
+/// Initializes heap using provided file.
+///
+/// Ownership is not taken of the given file, meaning it will not be closed
+/// when the heap is freed.
+///
+/// \param heap Pointer to uninitialized heap structure to initialize.
+/// \param file File to use.
+/// \returns    Error object, indicating any issues.
+///
+/// \see rvm_Heap
+/// \see rvm_freeHeap()
+rvm_HeapResult rvm_fileAsHeap(FILE *file);
+
+/// Initializes heap using file at provided path.
+///
+/// Takes ownership of the given file, meaning it will be closed when the heap
+/// is freed.
+///
+/// \param heap Pointer to uninitialized heap structure to initialize.
+/// \param path Path to file to open.
+/// \returns    Error object, indicating any issues.
+///
+/// \see rvm_Heap
+/// \see rvm_freeHeap()
+rvm_HeapResult rvm_fileIntoHeap(FILE *file);
+
+/// Gets heap value associated with given revision.
+///
+/// \param self     This heap.
+/// \param out      Pointer to value receiver.
+/// \param revision Target heap revision.
+/// \returns        Error object, indicating any issues.
+
+
+/// Destroys given heap, freeing up any resources held.
+///
+/// Any pending changes are guaranteed to be synchronized to any associated
+/// medium before freeing completes.
+///
+/// \param self Heap to free.
+static inline void rvm_freeHeap(rvm_Heap *heap) {
+    assert(heap != NULL);
+    assert(heap->free != NULL);
+
+    heap->free(heap);
+}
 
 #endif

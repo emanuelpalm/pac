@@ -1,5 +1,5 @@
-#ifndef LIB_META_ATTRIBUTE_H
-#define LIB_META_ATTRIBUTE_H
+#ifndef UTIL_META_ATTRIBUTE_H
+#define UTIL_META_ATTRIBUTE_H
 
 /// Compiler attributes.
 ///

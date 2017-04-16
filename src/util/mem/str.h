@@ -1,5 +1,5 @@
-#ifndef LIB_MEM_STRING_H
-#define LIB_MEM_STRING_H
+#ifndef UTIL_MEM_STRING_H
+#define UTIL_MEM_STRING_H
 
 /// C string utilities.
 ///
@@ -20,7 +20,7 @@ static inline char *mem_newString(const char *string) {
 
     char *buf = NULL;
     const size_t len = strlen(string) + 1;
-    if ((buf = malloc(len)) != NULL) {
+    if ((buf = (char *)malloc(len)) != NULL) {
         strncpy(buf, string, len);
     }
     return buf;

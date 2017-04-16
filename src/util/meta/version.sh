@@ -17,8 +17,8 @@ VERSION_HASH=$(git rev-parse --short HEAD 2> /dev/null)
 VERSION_UNIXTIME=$(git show --quiet --format=%ct 2> /dev/null)
 
 echo "\
-#ifndef LIB_META_VERSION_H
-#define LIB_META_VERSION_H
+#ifndef UTIL_META_VERSION_H
+#define UTIL_META_VERSION_H
 
 /// Project version information.
 ///
@@ -26,22 +26,22 @@ echo "\
 ///
 /// \\\\file
 
-/// Project version C string, on the form \`MAJOR.MINOR.PATCH\`.
+/// Project version, as C string on the form \`MAJOR.MINOR.PATCH\`.
 #define META_VERSION \"$VERSION\"
 
-/// Project major version integer.
+/// Project major version, as integer.
 #define META_VERSION_MAJOR $VERSION_MAJOR
 
-/// Project minor version integer.
+/// Project minor version, as integer.
 #define META_VERSION_MINOR $VERSION_MINOR
 
-/// Project patch version integer.
+/// Project patch version, as integer.
 #define META_VERSION_PATCH $VERSION_PATCH
 
-/// Project revision hash C string.
+/// Project version hash, as C string.
 #define META_VERSION_HASH \"$VERSION_HASH\"
 
-/// Project revision creation time, as seconds since 1970-01-01 00:00:00.
+/// Project version creation time, as seconds since 1970-01-01 00:00:00.
 #define META_VERSION_UNIXTIME $VERSION_UNIXTIME
 
 #endif" > $TARGET

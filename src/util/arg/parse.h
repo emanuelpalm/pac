@@ -1,5 +1,5 @@
-#ifndef LIBRARY_ARG_PARSE_H
-#define LIBRARY_ARG_PARSE_H
+#ifndef UTIL_ARG_PARSE_H
+#define UTIL_ARG_PARSE_H
 
 /// Argument vector parsing utilities.
 ///
@@ -12,6 +12,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+typedef struct arg_Option arg_Option;
+typedef struct arg_ParseResult arg_ParseResult;
 
 /// A command line option description.
 ///
@@ -21,49 +23,45 @@
 /// property is non-NULL.
 ///
 /// \see arg_parse()
-typedef struct arg_Option {
+struct arg_Option {
     /// Alphanumeric ASCII character, or space if no key is wanted.
     char key;
 
     /// Option name.
-    const char *name;
+    const char* name;
 
     /// Human-readable description of option.
-    const char *description;
+    const char* description;
 
     /// Human-readable value type name, or `NULL` if option is flag.
-    const char *valueType;
-} arg_Option;
-
+    const char* valueType;
+};
 
 /// The result of parsing some command line arguments.
 ///
 /// \see arg_parse()
-typedef struct arg_Result {
+struct arg_ParseResult {
     /// Amount of remaining non-parsed arguments.
     int tailc;
 
     /// Pointer to first non-parsed argument.
-    const char **tailv;
+    const char** tailv;
 
     /// If `false`, parsing stopped at unknown option now in `tailv[0]`.
-    bool isOk;
-} arg_Result;
-
+    bool ok;
+};
 
 /// Prints `option` to `stream`.
 ///
 /// \param stream Target output stream.
 /// \param option Pointer to option.
-void arg_fprintOption(FILE *stream, const arg_Option *option);
-
+void arg_fprintOption(FILE* stream, const arg_Option* option);
 
 /// Prints `options` to `stream`.
 ///
 /// \param stream  Target output stream.
 /// \param options Pointer to zero-terminated array of CLI options.
-void arg_fprintOptions(FILE *stream, const arg_Option options[]);
-
+void arg_fprintOptions(FILE* stream, const arg_Option options[]);
 
 /// \brief Parses `argc` and `argv` using `options` and writes any matches to
 /// `out`.
@@ -91,23 +89,23 @@ void arg_fprintOptions(FILE *stream, const arg_Option options[]);
 ///
 /// ```c
 /// int main(const int argc, const char *argv[]) {
-///     const arg_Option options[] = {
+///     const arg_Option opts[] = {
 ///         {'h', "help",    "Print help and exit."},      // Flag.
 ///         {'o', "output",  "Path to output.", "OUTPUT"}, // Pair.
 ///         {' ', "version", "Print version and exit."},   // Flag without key.
 ///         {0}                                            // Zero-terminator.
 ///     };
-///     const char *out[3] = {0}; // Zeroed array of same length as `options`.
+///     const char *out[3] = {0}; // Zeroed array of same length as `opts`.
 ///
-///     // argc and argv are modified to skip program name entry.
-///     const arg_Result result = arg_parse(argc - 1, &argv[1], options, out);
-///     if (!result.isOk) {
+///     // `argc` and `argv` are modified to skip program name entry.
+///     const arg_ParseResult result = arg_parse(argc-1, &argv[1], opts, out);
+///     if (!result.ok) {
 ///         fprintf(stderr, "Unknown option: %s\n", result.tailv[0]);
 ///         return EXIT_FAILURE;
 ///     }
-///     // Positions of values in `out` correspond with positions in `options`.
+///     // Positions of values in `out` correspond with positions in `opts`.
 ///     const bool help = out[0] != NULL; // Seen flags are set to "".
-///     const char *output = out[1];      // Seen pairs are set to their values.
+///     const char *output = out[1];      // Seen pairs are set to found values.
 ///     const bool version = out[2] != NULL;
 ///
 ///     return EXIT_SUCCESS;
@@ -121,8 +119,8 @@ void arg_fprintOptions(FILE *stream, const arg_Option options[]);
 /// \returns       Parse result.
 ///
 /// \see arg_Option
-/// \see arg_Result
-arg_Result arg_parse(int argc, const char **argv, const arg_Option options[],
-                     const char **out);
+/// \see arg_ParseResult
+arg_ParseResult arg_parse(
+    int argc, const char** argv, const arg_Option options[], const char** out);
 
 #endif

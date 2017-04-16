@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include "../../lib/mem/string.h"
-#include "../../lib/unit/unit.h"
+#include "../../../src/util/mem/str.h"
+#include "../../../src/util/unit/unit.h"
 
 void shouldCreateNewString(unit_T *t) {
     char *old = "This is a string!";

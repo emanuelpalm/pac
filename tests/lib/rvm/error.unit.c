@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include "../../lib/rvm/error.h"
-#include "../../lib/unit/unit.h"
+#include "../../../src/lib/rvm/error.h"
+#include "../../../src/util/unit/unit.h"
 
 void shouldUseKindAndMessageAsError(unit_T *t) {
     const rvm_Error error = rvm_asError(RVM_ERROR_USER, "Error A");

@@ -7,22 +7,19 @@
 
 #include <stdint.h>
 
-/// Indicates that some rvm_Function takes any amount of arguments when called.
-#define RVM_FUNCTION_ARITY_ANY -1
-
 typedef struct rvm_Function rvm_Function;
-typedef struct rvm_Value rvm_Value;
+typedef struct rvm_Node rvm_Node;
 
-/// A named function of known arity.
+/// A named node function of known arity.
 struct rvm_Function {
     /// Function name.
-    const char *name;
+    const char* name;
 
-    /// Function parameter count, or RVM_FUNCTION_ARITY_ANY if variadic.
+    /// Function parameter count.
     intptr_t arity;
 
-    /// Actual function pointer.
-    rvm_Value (*pointer)(rvm_Value *);
+    /// Pointer to actual C function.
+    rvm_Node (*pointer)(rvm_Node *);
 };
 
 #endif

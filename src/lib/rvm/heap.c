@@ -15,9 +15,9 @@ int main(void) {
     }
     for (int i = 0; i < 64; ++i) {
         uint64_t len = 1UL << i;
-        printf("Mapping %llu bytes of memory ... ", len);
+        printf("Mapping %zu bytes of memory ... ", len);
         uint8_t* m = mmap(NULL, len, PROT_READ | PROT_WRITE,
-                 MAP_PRIVATE | MAP_NORESERVE, fd, 0);
+                 MAP_PRIVATE, fd, 0);
         if (m == MAP_FAILED) {
             printf("failed (%s).\n", strerror(errno));
         } else {
